@@ -90,6 +90,12 @@ void AJHero::Tick(float DeltaTime)
 		LockCameraHelper();
 	}
 
+	if (bDodging)
+	{
+		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
+		SetActorLocation(NewLocation, true);
+	}
+
 	if (!bDodging && !bAttacking)
 		Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
 }
@@ -143,6 +149,7 @@ void AJHero::MoveForward(float Value)
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
+		//GetCharacterMovement()->AddForce(Direction*Value);
 	}
 }
 
@@ -159,6 +166,7 @@ void AJHero::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
+		//GetCharacterMovement()->AddForce(Direction*Value);
 	}
 }
 
@@ -172,7 +180,8 @@ void AJHero::Attack()
 		bInputtingDodge = false;
 	}
 
-	AttackHelper();
+	if(!bAttacking)
+		AttackHelper();
 }
 
 bool AJHero::AttackHelper()
@@ -231,11 +240,11 @@ bool AJHero::DodgeHelper()
 			Direction.Normalize();
 
 			// The location the dodge will end at is the current location + the dodge direction * 300
-			//DodgeLocation = GetActorLocation() + (Direction * 300);
+			DodgeLocation = GetActorLocation() + (Direction * 300);
 		}
 		else // If the player isn't inputting, dodge back
 		{
-			//DodgeLocation = GetActorLocation() + GetActorForwardVector() * (-300);
+			DodgeLocation = GetActorLocation() + GetActorForwardVector() * (-300);
 		}
 
 		return true;
