@@ -15,6 +15,8 @@ public:
 	APlaygroundHeroesGameMode();
 
 	virtual void BeginPlay() override;
+
+	void SpawnBothPlayers(UWorld* world);
 };
 
 
