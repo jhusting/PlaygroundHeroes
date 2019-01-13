@@ -108,7 +108,6 @@ protected:
 
 	/*
 	True when the player is currently in an attack animation
-	and is consequently invulnerable
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bAttacking;
@@ -166,6 +165,8 @@ protected:
 	*/
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	FVector InputDirection;
+
+	FVector DodgeLocation;
 
 	/*
 		A pointer to the target you are currently locked on to
