@@ -23,10 +23,10 @@ void APlaygroundHeroesGameMode::BeginPlay()
 	AJHero* const archer = World->SpawnActor<AJHero>();
 	UGameplayStatics::CreatePlayer(archer);
 	
-	SpawnBothPlayers(World);
+	//SpawnBothPlayers(World);
 }
 
-//
+/*
 void APlaygroundHeroesGameMode::SpawnBothPlayers(UWorld* World) {
 	//create 2nd player with controller id 1
 	UGameplayStatics::CreatePlayer(World, 1, true);
@@ -39,3 +39,4 @@ void APlaygroundHeroesGameMode::SpawnBothPlayers(UWorld* World) {
 	AJHero* archer = World->SpawnActor<AJHero>(FVector(0, 0, 2000));
 	APlayerController::Possess(archer, UGameplayStatics::GetPlayerController(World, 1));
 }
+*/
