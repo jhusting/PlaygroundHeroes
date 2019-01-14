@@ -21,5 +21,5 @@ void APlaygroundHeroesGameMode::BeginPlay()
 {
 	UWorld* const World = GetWorld();
 	AJHero* const archer = World->SpawnActor<AJHero>();
-	UGameplayStatics::CreatePlayer(archer);
+	APlayerController* PController = UGameplayStatics::CreatePlayer(GetWorld());
 }
