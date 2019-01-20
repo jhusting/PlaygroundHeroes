@@ -13,5 +13,21 @@ UCLASS()
 class PLAYGROUNDHEROES_API AJArcher : public AJHero
 {
 	GENERATED_BODY()
+
+	void ReleaseAttack();
+
+	virtual void Tick(float DeltaTime) override;
+public:
+	AJArcher();
 	
+protected:
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** Called for forwards/backward input */
+	virtual void MoveForward(float Value);
+
+	/** Called for side to side input */
+	virtual void MoveRight(float Value);
+
+	void Attack() override;
 };

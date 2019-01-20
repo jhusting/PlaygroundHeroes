@@ -19,9 +19,6 @@ class PLAYGROUNDHEROES_API AJHero : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
-	void LockCameraHelper();
-
 public:
 	// Sets default values for this character's properties
 	AJHero();
@@ -49,6 +46,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
+	void LockCameraHelper();
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
@@ -57,13 +57,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	/** Called for forwards/backward input */
-	void MoveForward(float Value);
+	virtual void MoveForward(float Value);
 
 	/** Called for side to side input */
-	void MoveRight(float Value);
+	virtual void MoveRight(float Value);
 
 	UFUNCTION(Category = "Combat")
-	void Attack();
+	virtual void Attack();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool AttackHelper();
