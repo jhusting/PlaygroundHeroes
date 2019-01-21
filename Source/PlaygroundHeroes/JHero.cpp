@@ -12,6 +12,7 @@
 #include "EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "Engine.h"
 
 // Sets default values
 AJHero::AJHero()
@@ -139,6 +140,7 @@ void AJHero::LookUpAtRate(float Rate)
 
 void AJHero::MoveForward(float Value)
 {
+	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.X = Value;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
@@ -155,6 +157,7 @@ void AJHero::MoveForward(float Value)
 
 void AJHero::MoveRight(float Value)
 {
+	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.Y = Value;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
@@ -259,22 +262,38 @@ void AJHero::LockCamera()
 	{
 		bIsLocked = false;
 		lockTarget = nullptr;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 	else
 	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 		//uncomment when AJEnemy is in
-		/*for (TActorIterator<AActor> itr(GetWorld()); itr; ++itr)
+		AJEnemy* closest = nullptr;
+		float closestAngle = 360.f;
+		for (TActorIterator<AActor> itr(GetWorld()); itr; ++itr)
 		{
 			AJEnemy* const JEnemyItr = Cast<AJEnemy>(*itr);
+
 			if (JEnemyItr)
 			{
-				if (lockTarget == nullptr)
+				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), JEnemyItr->GetActorLocation()).Clamp();
+				FRotator camRotation = GetControlRotation().Clamp();
+
+				float emAngle = UKismetMathLibrary::Abs(camRotation.Yaw - newRotation.Yaw);
+				
+				if (emAngle < closestAngle)
 				{
-					lockTarget = JEnemyItr;
+					closestAngle = emAngle;
+					closest = JEnemyItr;
 				}
-				bIsLocked = true;
 			}
-		}*/
+		}
+
+		if (closest != nullptr)
+		{
+			lockTarget = closest;
+			bIsLocked = true;
+		}
 	}
 }
 
@@ -290,4 +309,11 @@ void AJHero::LockCameraHelper()
 	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
 
 	Controller->SetControlRotation(change);
+
+	const FRotator Rotation = Controller->GetControlRotation();
+	FRotator PlayerRotation = GetActorRotation();
+
+	PlayerRotation.Yaw = Rotation.Yaw;
+
+	SetActorRotation(PlayerRotation);
 }

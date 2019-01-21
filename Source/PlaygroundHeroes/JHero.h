@@ -47,7 +47,7 @@ public:
 
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
-	void LockCameraHelper();
+	virtual void LockCameraHelper();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

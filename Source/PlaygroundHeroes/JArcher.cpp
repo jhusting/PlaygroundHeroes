@@ -5,6 +5,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "JEnemy.h"
+
 
 AJArcher::AJArcher()
 {
@@ -26,6 +28,16 @@ void AJArcher::Tick(float DeltaTime)
 	if (bIsLocked)
 	{
 		Super::LockCameraHelper();
+	}
+
+	if (bAttacking)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		FRotator PlayerRotation = GetActorRotation();
+
+		PlayerRotation.Yaw = Rotation.Yaw;
+
+		SetActorRotation(PlayerRotation);
 	}
 
 	if (bDodging)
@@ -69,6 +81,7 @@ void AJArcher::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AJArcher::MoveForward(float Value)
 {
+	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.X = Value;
 	if ((Controller != NULL) && (Value != 0.0f) && !bDodging)
 	{
@@ -87,6 +100,7 @@ void AJArcher::MoveForward(float Value)
 
 void AJArcher::MoveRight(float Value)
 {
+	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.Y = Value;
 	if ((Controller != NULL) && (Value != 0.0f) && !bDodging)
 	{
@@ -103,12 +117,32 @@ void AJArcher::MoveRight(float Value)
 		//GetCharacterMovement()->AddForce(Direction*Value);
 	}
 }
+void AJArcher::LockCameraHelper()
+{
+	FVector enLocation = lockTarget->GetActorLocation();
+	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), enLocation);
+	FRotator oldRotation = GetControlRotation();
+
+	newRotation.Pitch = -15.f;
+	newRotation.Roll = 0;
+
+	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
+
+	//Controller->SetControlRotation(change);
+
+	if ((oldRotation - newRotation).Yaw < 3.f)
+	{
+		bIsLocked = false;
+		lockTarget = nullptr;
+	}
+}
 
 void AJArcher::Attack()
 {
 	if (Stamina > 0.f)
 	{
 		bAttacking = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 	}
 	else
 		bAttacking = false;
@@ -121,5 +155,6 @@ void AJArcher::ReleaseAttack()
 		//do stuff
 		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 }
