@@ -5,6 +5,7 @@
 AJKnight::AJKnight()
 {
 	//Super::AJHero();
+	
 
 	bCanDamage = false;
 }

@@ -10,6 +10,10 @@
 
 AJArcher::AJArcher()
 {
+	MaxHealth = 100;
+	Health = MaxHealth;
+	MaxStamina = 100;
+	Stamina = MaxStamina;
 }
 
 void AJArcher::Tick(float DeltaTime)

@@ -143,14 +143,14 @@ protected:
 	float InputQueueTime;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float Health;
+	float Health = 100;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float MaxHealth;
+	float MaxHealth = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float Stamina;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float MaxStamina;
+		float Stamina = 100;
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float MaxStamina = 100;
 
 
 	/*
