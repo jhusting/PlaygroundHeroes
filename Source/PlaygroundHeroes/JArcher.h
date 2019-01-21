@@ -14,6 +14,8 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 {
 	GENERATED_BODY()
 
+	TSubclassOf<class AActor> ArrowBP;
+
 	void ReleaseAttack();
 
 	virtual void Tick(float DeltaTime) override;

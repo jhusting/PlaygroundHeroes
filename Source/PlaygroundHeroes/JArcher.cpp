@@ -6,10 +6,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "JEnemy.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 
 
 AJArcher::AJArcher()
 {
+	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/ArrowBP"));
+	if (ArrowBPClass.Class != NULL)
+	{
+		ArrowBP = ArrowBPClass.Class;
+	}
 }
 
 void AJArcher::Tick(float DeltaTime)
@@ -143,6 +150,19 @@ void AJArcher::Attack()
 	{
 		bAttacking = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
+
+		UWorld* const World = GetWorld();
+		if (World) 
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Instigator = this;
+			AActor* arrow = World->SpawnActor<AActor>(ArrowBP, GetActorLocation(), GetActorRotation(), SpawnParams);
+			if (arrow) 
+			{
+				//arrow->attachrootcomp
+				//arrow->AttachToComponent(GetMesh(),)
+			}
+		}
 	}
 	else
 		bAttacking = false;
