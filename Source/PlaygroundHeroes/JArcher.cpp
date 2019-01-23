@@ -12,11 +12,16 @@
 
 AJArcher::AJArcher()
 {
+
 	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/ArrowBP"));
 	if (ArrowBPClass.Class != NULL)
 	{
 		ArrowBP = ArrowBPClass.Class;
 	}
+	MaxHealth = 100;
+	Health = MaxHealth;
+	MaxStamina = 100;
+	Stamina = MaxStamina;
 }
 
 void AJArcher::Tick(float DeltaTime)
