@@ -19,6 +19,9 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 	void ReleaseAttack();
 
 	virtual void Tick(float DeltaTime) override;
+
+	AActor* mArrow = nullptr;
+
 public:
 	AJArcher();
 	
