@@ -29,7 +29,11 @@ public:
 
 	int Step;
 
+	//If false, not even the correct input will advance to the next stage. Intented for use to make sure any events (dialog, cutscene, etc) are fully done, before allowing continuation
+	bool canAdvance;
+
 	void DisplayText();
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,6 +42,8 @@ protected:
 	void KnightLockOn();
 
 	void KnightAttackPressed();
+
+	void KnightMoved();
 
 public:
 	// Called every frame

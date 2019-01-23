@@ -38,6 +38,14 @@ public:
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
 
+	FORCEINLINE bool GetInputAttack() const { return bInputtingAttack; }
+
+	FORCEINLINE bool GetInputDodge() const { return bInputtingDodge; }
+
+	FORCEINLINE FVector GetInputDirection() const {return InputDirection;}
+
+//	FORCEINLINE AJEnemy* GetLockTarget() { return lockTarget; }
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
@@ -148,9 +156,9 @@ protected:
 	float MaxHealth = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-		float Stamina = 100;
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-		float MaxStamina = 100;
+	float Stamina = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MaxStamina = 100;
 
 
 	/*
