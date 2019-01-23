@@ -16,20 +16,26 @@
 
 AJArcher::AJArcher()
 {
-
 	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/ArrowBP"));
 	if (ArrowBPClass.Class != NULL)
 	{
 		ArrowBP = ArrowBPClass.Class;
 	}
+
 	MaxHealth = 100;
 	Health = MaxHealth;
 	MaxStamina = 100;
 	Stamina = MaxStamina;
+	BaseArrowSpeed = 2500.f;
+	HeldSpeedAdded = 3500.f;
+	HoldTimeNeeded = 1.5f;
 }
 
 void AJArcher::Tick(float DeltaTime)
 {
+	if (timeHeld >= 0.f)
+		timeHeld += DeltaTime;
+
 	if (TimeSinceLastInput >= InputQueueTime)
 	{
 		bInputtingAttack = false;
@@ -159,6 +165,7 @@ void AJArcher::Attack()
 	{
 		bAttacking = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
+		timeHeld = 0.f;
 
 		UWorld* const World = GetWorld();
 		if (World) 
@@ -206,8 +213,12 @@ void AJArcher::ReleaseAttack()
 		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true, 100.f, (uint8)'\000', 2.f);
 		mArrow->SetActorRotation(lookAt);
 
-		proj->SetVelocityInLocalSpace(FVector(2500.f, 0.f, 0.f));
+		float heldRatio = FMath::Clamp(timeHeld / HoldTimeNeeded, 0.f, 1.f);
+
+		proj->SetVelocityInLocalSpace(FVector(BaseArrowSpeed + HeldSpeedAdded*heldRatio, 0.f, 0.f));
 		proj->bSimulationEnabled = true;
+
+		mArrow = nullptr;
 
 		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = false;
