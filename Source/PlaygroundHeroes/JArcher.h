@@ -19,10 +19,23 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 	void ReleaseAttack();
 
 	virtual void Tick(float DeltaTime) override;
+
+	AActor* mArrow = nullptr;
+	float timeHeld = -1.f;
+
 public:
 	AJArcher();
 	
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float HeldSpeedAdded;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float BaseArrowSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float HoldTimeNeeded;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Called for forwards/backward input */

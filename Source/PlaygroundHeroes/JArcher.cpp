@@ -8,6 +8,10 @@
 #include "JEnemy.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/ProjectileMovementComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Runtime/Engine/Public/DrawDebugHelpers.h"
+#include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 
 
 AJArcher::AJArcher()
@@ -17,10 +21,21 @@ AJArcher::AJArcher()
 	{
 		ArrowBP = ArrowBPClass.Class;
 	}
+
+	MaxHealth = 100;
+	Health = MaxHealth;
+	MaxStamina = 100;
+	Stamina = MaxStamina;
+	BaseArrowSpeed = 2500.f;
+	HeldSpeedAdded = 3500.f;
+	HoldTimeNeeded = 1.5f;
 }
 
 void AJArcher::Tick(float DeltaTime)
 {
+	if (timeHeld >= 0.f)
+		timeHeld += DeltaTime;
+
 	if (TimeSinceLastInput >= InputQueueTime)
 	{
 		bInputtingAttack = false;
@@ -150,6 +165,7 @@ void AJArcher::Attack()
 	{
 		bAttacking = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
+		timeHeld = 0.f;
 
 		UWorld* const World = GetWorld();
 		if (World) 
@@ -157,10 +173,15 @@ void AJArcher::Attack()
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Instigator = this;
 			AActor* arrow = World->SpawnActor<AActor>(ArrowBP, GetActorLocation(), GetActorRotation(), SpawnParams);
+
 			if (arrow) 
 			{
-				//arrow->attachrootcomp
-				//arrow->AttachToComponent(GetMesh(),)
+				mArrow = arrow;
+
+				mArrow->AttachToComponent((USceneComponent *)GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), FName("LeftHandSocket"));
+
+				FTransform newTrans = FTransform(FRotator(-9.463848f, -73.49968f, -0.328553f), FVector(-3.176191f, 32.43071f, 10.986347f), FVector(.75f, .75f, .75f));
+				mArrow->SetActorRelativeTransform(newTrans);
 			}
 		}
 	}
@@ -173,6 +194,32 @@ void AJArcher::ReleaseAttack()
 	if (bAttacking)
 	{
 		//do stuff
+		//mArrow->DetachRootComponentFromParent(true);
+		mArrow->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false));
+		UProjectileMovementComponent* proj = (UProjectileMovementComponent*)mArrow->GetComponentByClass(UProjectileMovementComponent::StaticClass());
+
+		FCollisionQueryParams RV_TraceParams;
+
+		//Re-initialize hit info
+		FHitResult RV_Hit(ForceInit);
+
+		FVector Start = GetCameraBoom()->GetSocketTransform(USpringArmComponent::SocketName).GetLocation();
+		FVector End = Start + (GetFollowCamera()->GetForwardVector()) * 10000;
+
+		GetWorld()->LineTraceSingleByChannel(RV_Hit, Start, End, ECC_Visibility);
+
+		FRotator lookAt = UKismetMathLibrary::FindLookAtRotation(mArrow->GetActorLocation(), RV_Hit.ImpactPoint);
+		//UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), RV_Hit.ImpactPoint.X, RV_Hit.ImpactPoint.Y, RV_Hit.ImpactPoint.Z);
+		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true, 100.f, (uint8)'\000', 2.f);
+		mArrow->SetActorRotation(lookAt);
+
+		float heldRatio = FMath::Clamp(timeHeld / HoldTimeNeeded, 0.f, 1.f);
+
+		proj->SetVelocityInLocalSpace(FVector(BaseArrowSpeed + HeldSpeedAdded*heldRatio, 0.f, 0.f));
+		proj->bSimulationEnabled = true;
+
+		mArrow = nullptr;
+
 		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
