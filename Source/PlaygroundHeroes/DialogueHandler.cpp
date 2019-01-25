@@ -34,17 +34,13 @@ void ADialogueHandler::Tick(float DeltaTime)
 void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<float> durations) {
 	maxLines = lines.Num();
 
-	//clearing out old dialouge and druations
+	//clearing out old dialogue and durations
 	dialogueLines.Empty();
 	dialogueDurations.Empty();
 
-	//Fill TArrays in with input arrays
-	for (int i = 0; i < maxLines; i++) {
-		dialogueLines.Add(lines[i]);
-	}
-	for (int i = 0; i < durations.Num(); i++) {
-		dialogueDurations.Add(durations[i]);
-	}
+	//refill with new dialogue and durations
+	dialogueLines.Append(lines);
+	dialogueDurations.Append(durations);
 
 	//Set default values for new dialouge sequence
 	timeSinceLastLineChange = 0.0f;
@@ -53,17 +49,13 @@ void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<flo
 	dialougeFinished = false;
 	renderWidget = true;
 
-	for (int i = 0; i < dialogueLines.Num(); i++) {
-		UE_LOG(LogTemp, Warning, TEXT("index[%d]: %s"), i, *dialogueLines[i]);
-	}
-
 	//sampleText is the text that is sent to the Widget. Sets sampleText to first lnie of Dialogue
 	if (dialogueLines.IsValidIndex(lineNumber)) {
 		sampleText = dialogueLines[lineNumber];
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Index 0 is invalid???? really?"));
+		UE_LOG(LogTemp, Warning, TEXT("Index %d is invalid"), lineNumber);
 	}
 
 }
@@ -71,6 +63,7 @@ void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<flo
 void ADialogueHandler::updateDialogue(float DeltaTime) {
 	if (paused) return; //Keep updateDialogue from running if paused.
 	
+	//Check if there are still more dialogue lines
 	if (maxLines > lineNumber) {
 		timeSinceLastLineChange += DeltaTime;
 
@@ -83,9 +76,11 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 			delayFor = defaultDuration;
 		}
 
+		//check if duration for current line is finished
 		if (timeSinceLastLineChange >= delayFor) {
 			lineNumber++;
 
+			//Set sampleText to the next line
 			if (dialogueLines.IsValidIndex(lineNumber)) {
 				sampleText = dialogueLines[lineNumber];
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
@@ -93,7 +88,7 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 			else {
 				UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
 			}
-			
+			//reset time counter
 			timeSinceLastLineChange = 0.0f;
 		}
 	}

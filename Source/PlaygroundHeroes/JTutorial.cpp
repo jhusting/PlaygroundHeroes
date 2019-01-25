@@ -63,13 +63,8 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			text = { "Text 1", "Text 2", "Text 3" };
 			durations = { 2.0f, 2.0f, 1.0f };
-			for (int i = 0; i < text.Num(); i++) {
-				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
-			}
 			DialogueHandler->sendNewDialougeSequence(text, durations);
-			dialogueSent = true;
-			UE_LOG(LogTemp, Warning, TEXT("Sent for Case 0"));
-			
+			dialogueSent = true;			
 		}
 		break;
 
@@ -77,13 +72,8 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			text = { "next 1", "next 2", "next 3" };
 			durations = { 1.0f, 1.0f, 1.0f };
-			for (int i = 0; i < text.Num(); i++) {
-				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
-			}
 			DialogueHandler->sendNewDialougeSequence(text, durations);
-			dialogueSent = true;
-			UE_LOG(LogTemp, Warning, TEXT("Sent for Case 1"));
-			
+			dialogueSent = true;			
 		}
 		break;
 
@@ -91,9 +81,6 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			text = { "mext 1", "mext 2", "mext 3" };
 			durations = { 2.0f, 2.0f, 2.0f };
-			for (int i = 0; i < text.Num(); i++) {
-				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
-			}
 			DialogueHandler->sendNewDialougeSequence(text, durations);
 			dialogueSent = true;
 			
@@ -103,10 +90,7 @@ void AJTutorial::DisplayText() {
 	case 3:
 		if (!dialogueSent) {
 			text = { "pext 1", "pext 2", "pext 3" };
-			durations = { 3.0f, 2.0f, 5.0f };
-			for (int i = 0; i < text.Num(); i++) {
-				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
-			}
+			durations = { 3.0f, 2.0f, 5.0f };			
 			DialogueHandler->sendNewDialougeSequence(text, durations);
 			dialogueSent = true;
 			
@@ -117,9 +101,6 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			text = { "sext 1", "sext 2", "sext 3" };
 			durations = { 3.0f, 2.0f, 5.0f };
-			for (int i = 0; i < text.Num(); i++) {
-				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
-			}
 			DialogueHandler->sendNewDialougeSequence(text, durations);
 			dialogueSent = true;
 		}
