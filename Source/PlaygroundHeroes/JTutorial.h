@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "JArcher.h"
 #include "JKnight.h"
+#include "DialogueHandler.h"
 #include "Components/InputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -26,11 +27,14 @@ public:
 
 	AJKnight* knight;
 	AJArcher* archer;
+	ADialogueHandler* DialogueHandler;
 
 	int Step;
 
 	//If false, not even the correct input will advance to the next stage. Intented for use to make sure any events (dialog, cutscene, etc) are fully done, before allowing continuation
 	bool canAdvance;
+	bool dialogueSent;
+
 
 	void DisplayText();
 

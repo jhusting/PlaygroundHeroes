@@ -29,10 +29,9 @@ void ADialogueHandler::BeginPlay()
 void ADialogueHandler::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void ADialogueHandler::putLinesAndDurationsInTArrays(TArray<FString> lines, TArray<float> durations) {
+void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<float> durations) {
 	maxLines = lines.Num();
 
 	//clearing out old dialouge and druations
@@ -47,17 +46,26 @@ void ADialogueHandler::putLinesAndDurationsInTArrays(TArray<FString> lines, TArr
 		dialogueDurations.Add(durations[i]);
 	}
 
-	//sampleText is the text that is sent to the Widget. Sets sampleText to first lnie of Dialogue
-	if (dialogueLines.IsValidIndex(lineNumber)) {
-		sampleText = dialogueLines[lineNumber];
-		UE_LOG(LogTemp, Warning, TEXT("sampleText = %s"), *sampleText);
-	}
 	//Set default values for new dialouge sequence
 	timeSinceLastLineChange = 0.0f;
 	lineNumber = 0;
 	paused = false;
 	dialougeFinished = false;
 	renderWidget = true;
+
+	for (int i = 0; i < dialogueLines.Num(); i++) {
+		UE_LOG(LogTemp, Warning, TEXT("index[%d]: %s"), i, *dialogueLines[i]);
+	}
+
+	//sampleText is the text that is sent to the Widget. Sets sampleText to first lnie of Dialogue
+	if (dialogueLines.IsValidIndex(lineNumber)) {
+		sampleText = dialogueLines[lineNumber];
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Index 0 is invalid???? really?"));
+	}
+
 }
 
 void ADialogueHandler::updateDialogue(float DeltaTime) {
@@ -66,15 +74,16 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 	if (maxLines > lineNumber) {
 		timeSinceLastLineChange += DeltaTime;
 
-		float countTo;
+		float delayFor;
+		//Use given dialogue duration, if there isn't one use the default
 		if (dialogueDurations.IsValidIndex(lineNumber)) {
-			countTo = dialogueDurations[lineNumber];
+			delayFor = dialogueDurations[lineNumber];
 		} 
 		else {
-			countTo = defaultDuration;
+			delayFor = defaultDuration;
 		}
 
-		if (timeSinceLastLineChange >= countTo) {
+		if (timeSinceLastLineChange >= delayFor) {
 			lineNumber++;
 
 			if (dialogueLines.IsValidIndex(lineNumber)) {
@@ -93,5 +102,17 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 		paused = true;
 		dialougeFinished = true;
 	}
+}
+
+void ADialogueHandler::pauseDialogue() {
+	paused = true;
+	renderWidget = false;
+}
+void ADialogueHandler::resumeDialogue() {
+	paused = false;
+	renderWidget = true;
+}
+int ADialogueHandler::getLineNumber() {
+	return lineNumber;
 }
 

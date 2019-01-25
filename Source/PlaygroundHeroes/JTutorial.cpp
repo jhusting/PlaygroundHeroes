@@ -2,6 +2,7 @@
 
 #include "JTutorial.h"
 #include <EngineGlobals.h>
+#include <Runtime/Core/Public/Containers/Array.h>
 #include <Runtime/Engine/Classes/Engine/Engine.h>
 
 
@@ -35,7 +36,17 @@ void AJTutorial::BeginPlay()
 		if (ArcherItr)
 		{
 			//KnightItr is your reference
+			UE_LOG(LogTemp, Warning, TEXT("Knight found"));
 			archer = ArcherItr;
+		}
+
+		ADialogueHandler* DialogueHandlerItr = Cast<ADialogueHandler>(*itr);
+
+		if (DialogueHandlerItr)
+		{
+			//KnightItr is your reference
+			DialogueHandler = DialogueHandlerItr;
+			UE_LOG(LogTemp, Warning, TEXT("DialogueHandler found"));
 		}
 	}
 	
@@ -43,10 +54,77 @@ void AJTutorial::BeginPlay()
 }
 
 void AJTutorial::DisplayText() {
+	TArray<FString> text;
+	TArray<float> durations;
+
 	switch (Step)
 	{
 	case 0:
+		if (!dialogueSent) {
+			text = { "Text 1", "Text 2", "Text 3" };
+			durations = { 2.0f, 2.0f, 1.0f };
+			for (int i = 0; i < text.Num(); i++) {
+				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
+			}
+			DialogueHandler->sendNewDialougeSequence(text, durations);
+			dialogueSent = true;
+			UE_LOG(LogTemp, Warning, TEXT("Sent for Case 0"));
+			
+		}
 		break;
+
+	case 1:
+		if (!dialogueSent) {
+			text = { "next 1", "next 2", "next 3" };
+			durations = { 1.0f, 1.0f, 1.0f };
+			for (int i = 0; i < text.Num(); i++) {
+				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
+			}
+			DialogueHandler->sendNewDialougeSequence(text, durations);
+			dialogueSent = true;
+			UE_LOG(LogTemp, Warning, TEXT("Sent for Case 1"));
+			
+		}
+		break;
+
+	case 2:
+		if (!dialogueSent) {
+			text = { "mext 1", "mext 2", "mext 3" };
+			durations = { 2.0f, 2.0f, 2.0f };
+			for (int i = 0; i < text.Num(); i++) {
+				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
+			}
+			DialogueHandler->sendNewDialougeSequence(text, durations);
+			dialogueSent = true;
+			
+		}
+		break;
+
+	case 3:
+		if (!dialogueSent) {
+			text = { "pext 1", "pext 2", "pext 3" };
+			durations = { 3.0f, 2.0f, 5.0f };
+			for (int i = 0; i < text.Num(); i++) {
+				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
+			}
+			DialogueHandler->sendNewDialougeSequence(text, durations);
+			dialogueSent = true;
+			
+		}
+		break;
+
+	case 4:
+		if (!dialogueSent) {
+			text = { "sext 1", "sext 2", "sext 3" };
+			durations = { 3.0f, 2.0f, 5.0f };
+			for (int i = 0; i < text.Num(); i++) {
+				UE_LOG(LogTemp, Warning, TEXT("text is: %s"), *text[i]);
+			}
+			DialogueHandler->sendNewDialougeSequence(text, durations);
+			dialogueSent = true;
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -97,43 +175,51 @@ void AJTutorial::Tick(float DeltaTime)
 	case 0:
 		//DisplayText[text1, text2, text3] //intro text about world
 		//When text is done, move onwards
-		if (canAdvance) {
+		DisplayText();
+		if (DialogueHandler->dialougeFinished) {
 			Step++;
+			dialogueSent = false;
 		}
 		break;
 	case 1: //Any Movement
-		//DisplayText();
-		if (canAdvance) {
+		DisplayText();
+		if (DialogueHandler->dialougeFinished) {
 			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0
 				|| knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) {
 				Step++;
+				dialogueSent = false;
 			}
 		}
 		break;
 	case 2: //knight right stick and RB
-		//DisplayText();
-		if (canAdvance) {
+		DisplayText();
+		if (DialogueHandler->dialougeFinished) {
+			
 			if (/*knight->GetLockTarget() &&*/ (knight->GetInputAttack() || knight->GetAttacking()) 
 				&& (archer->GetInputDodge() || archer->GetDodging() ) ) {
 				Step++;
+				dialogueSent = false;
 			}
 		}
 		break;
 	case 3:
-		//DisplayText
-		if (canAdvance) {
+		DisplayText();
+		if (DialogueHandler->dialougeFinished) {
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
+				dialogueSent = false;
 			}
 		}
 		break;
+
 	case 4:
-		//DisplayText();
-		if (canAdvance) {
+		DisplayText();
+		if (DialogueHandler->dialougeFinished) {
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
+				dialogueSent = false;
 			}
 		}
 		break;

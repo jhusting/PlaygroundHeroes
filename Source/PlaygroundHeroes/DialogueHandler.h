@@ -51,9 +51,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		void putLinesAndDurationsInTArrays(TArray<FString> lines, TArray<float> durations);
+		void sendNewDialougeSequence(TArray<FString> lines, TArray<float> durations);
 
 	UFUNCTION(BlueprintCallable)
 		void updateDialogue(float DeltaTime);
 
+	UFUNCTION(BlueprintCallable)
+		void pauseDialogue();
+	
+	UFUNCTION(BlueprintCallable)
+		void resumeDialogue();
+
+	UFUNCTION(BlueprintCallable)
+		int getLineNumber();
 };
