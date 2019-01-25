@@ -206,12 +206,15 @@ void AJArcher::ReleaseAttack()
 		FVector Start = GetCameraBoom()->GetSocketTransform(USpringArmComponent::SocketName).GetLocation();
 		FVector End = Start + (GetFollowCamera()->GetForwardVector()) * 10000;
 
-		GetWorld()->LineTraceSingleByChannel(RV_Hit, Start, End, ECC_Visibility);
+		bool bHit = GetWorld()->LineTraceSingleByChannel(RV_Hit, Start, End, ECC_Visibility);
 
 		FRotator lookAt = UKismetMathLibrary::FindLookAtRotation(mArrow->GetActorLocation(), RV_Hit.ImpactPoint);
 		//UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), RV_Hit.ImpactPoint.X, RV_Hit.ImpactPoint.Y, RV_Hit.ImpactPoint.Z);
 		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true, 100.f, (uint8)'\000', 2.f);
-		mArrow->SetActorRotation(lookAt);
+		if (RV_Hit.bBlockingHit)
+			mArrow->SetActorRotation(lookAt);
+		else
+			mArrow->SetActorRotation(GetControlRotation());
 
 		float heldRatio = FMath::Clamp(timeHeld / HoldTimeNeeded, 0.f, 1.f);
 
