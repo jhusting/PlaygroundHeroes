@@ -62,11 +62,11 @@ void AJArcher::Tick(float DeltaTime)
 		SetActorRotation(PlayerRotation);
 	}
 
-	if (bDodging)
+	/*if (bDodging)
 	{
 		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
 		SetActorLocation(NewLocation, true);
-	}
+	}*/
 
 	if (!bDodging)
 	{
