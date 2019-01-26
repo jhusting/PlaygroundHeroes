@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "JTutorial.h"
 #include <EngineGlobals.h>
@@ -12,6 +12,42 @@ AJTutorial::AJTutorial()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//set default dialogue lines:
+	lines0.Add("introText 1");	
+	lines0.Add("introText 2"); 
+	lines0.Add("introText 3");
+	durations0.Add(3.0);
+
+	lines1.Add("LEILA: Now, although we may be the strongest fighters in all the land, we still need to practice!");
+	lines1.Add("LEILA: We can’t be rusty when we battle Zorrander.");
+	lines1.Add("LEILA: First let’s get used to moving around in our armor again.");
+	inputDurations.Add(3.0);
+
+	inputs0.Add("<Player 1: Use left stick to move>");
+	inputs0.Add("<Player 2: Use left stick to move>");
+
+	lines2.Add("ABIGAIL: Bet you can’t hit me with your sword!");
+	lines2.Add("LEILA: Oh yeah? We’ll see about that!");
+
+	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
+	inputs1.Add("<Player 1: Hold the RT and push the Left Stick in a direction to Dodge>");
+
+	lines3.Add("LEILA: Nice job! I think we’re almost ready for our adventure. ");
+	lines3.Add("LEILA: Now try to hit me with an arrow!");
+	lines3.Add("ABIGAIL: Ok, stand back!");
+
+	inputs2.Add("<Player 1: Right Stick to Lock On to a target. Hold RB to charge an arrow, release to Shoot>");
+	inputs2.Add("<Player 2: Hold the RT and push the Left Stick in a direction to Dodge>");
+
+	lines4.Add("ABIGAIL: Even though we haven’t battled in ages, it’s all coming back to me now.");
+	lines4.Add("ABIGAIL: Why don’t you try blocking an arrow with your shield?");
+
+	inputs3.Add("<Player 1: Hold RB to charge an arrow, release to Shoot>");
+	inputs3.Add("<Player 2: Hold the LB to Block an incoming attack>");
+
+	lines5.Add("LEILA: *huffs* Good fight.");
+	lines5.Add("LEILA: We can keep training if you’d like,");
+	lines5.Add("but I think we’re about ready to head into the forest.");
 }
 
 // Called when the game starts or when spawned
@@ -54,44 +90,34 @@ void AJTutorial::BeginPlay()
 }
 
 void AJTutorial::DisplayText() {
-	TArray<FString> text;
-	TArray<float> durations;
 
 	switch (Step)
 	{
 	case 0:
 		if (!dialogueSent) {
-			text = { "Text 1", "Text 2", "Text 3" };
-			durations = { 2.0f, 2.0f, 1.0f };
-			DialogueHandler->sendNewDialougeSequence(text, durations);
+			DialogueHandler->sendNewdialogueSequence(lines0, durations0);
 			dialogueSent = true;			
 		}
 		break;
 
 	case 1:
 		if (!dialogueSent) {
-			text = { "next 1", "next 2", "next 3" };
-			durations = { 1.0f, 1.0f, 1.0f };
-			DialogueHandler->sendNewDialougeSequence(text, durations);
+			DialogueHandler->sendNewdialogueSequence(lines1, durations1);
 			dialogueSent = true;			
 		}
 		break;
 
 	case 2:
 		if (!dialogueSent) {
-			text = { "mext 1", "mext 2", "mext 3" };
-			durations = { 2.0f, 2.0f, 2.0f };
-			DialogueHandler->sendNewDialougeSequence(text, durations);
+			DialogueHandler->sendNewdialogueSequence(lines2, durations2);
 			dialogueSent = true;
 			
 		}
 		break;
 
 	case 3:
-		if (!dialogueSent) {
-			text = { "pext 1", "pext 2", "pext 3" };
-			durations = { 3.0f, 2.0f, 5.0f };			
-			DialogueHandler->sendNewDialougeSequence(text, durations);
+		if (!dialogueSent) {	
+			DialogueHandler->sendNewdialogueSequence(lines3, durations3);
 			dialogueSent = true;
 			
 		}
@@ -99,9 +125,14 @@ void AJTutorial::DisplayText() {
 
 	case 4:
 		if (!dialogueSent) {
-			text = { "sext 1", "sext 2", "sext 3" };
-			durations = { 3.0f, 2.0f, 5.0f };
-			DialogueHandler->sendNewDialougeSequence(text, durations);
+			DialogueHandler->sendNewdialogueSequence(lines4, durations4);
+			dialogueSent = true;
+		}
+		break;
+
+	case 5:
+		if (!dialogueSent) {
+			DialogueHandler->sendNewdialogueSequence(lines5, durations5);
 			dialogueSent = true;
 		}
 		break;
@@ -157,38 +188,62 @@ void AJTutorial::Tick(float DeltaTime)
 		//DisplayText[text1, text2, text3] //intro text about world
 		//When text is done, move onwards
 		DisplayText();
-		if (DialogueHandler->dialougeFinished) {
+		if (DialogueHandler->dialogueFinished) {
 			Step++;
 			dialogueSent = false;
 		}
 		break;
 	case 1: //Any Movement
 		DisplayText();
-		if (DialogueHandler->dialougeFinished) {
+		if (DialogueHandler->dialogueFinished) {
+
+			//send input instruction text
+			DialogueHandler->differentBetweenPlayers = true;
+			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
+			DialogueHandler->paused = true;
+			DialogueHandler->dialogueFinished = true;
+
 			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0
 				|| knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) {
 				Step++;
+				DialogueHandler->differentBetweenPlayers = false;
+				DialogueHandler->paused = false;
 				dialogueSent = false;
 			}
 		}
 		break;
 	case 2: //knight right stick and RB
 		DisplayText();
-		if (DialogueHandler->dialougeFinished) {
+		if (DialogueHandler->dialogueFinished) {
+
+			//send input instruction text
+			DialogueHandler->differentBetweenPlayers = true;
+			DialogueHandler->sendNewdialogueSequence(inputs1, inputDurations);
+			DialogueHandler->paused = true;
+			DialogueHandler->dialogueFinished = true;
 			
 			if (/*knight->GetLockTarget() &&*/ (knight->GetInputAttack() || knight->GetAttacking()) 
 				&& (archer->GetInputDodge() || archer->GetDodging() ) ) {
 				Step++;
+				DialogueHandler->differentBetweenPlayers = false;
 				dialogueSent = false;
 			}
 		}
 		break;
 	case 3:
 		DisplayText();
-		if (DialogueHandler->dialougeFinished) {
+		if (DialogueHandler->dialogueFinished) {
+
+			//send input instruction text
+			DialogueHandler->differentBetweenPlayers = true;
+			DialogueHandler->sendNewdialogueSequence(inputs2, inputDurations);
+			DialogueHandler->paused = true;
+			DialogueHandler->dialogueFinished = true;
+
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
+				DialogueHandler->differentBetweenPlayers = false;
 				dialogueSent = false;
 			}
 		}
@@ -196,14 +251,33 @@ void AJTutorial::Tick(float DeltaTime)
 
 	case 4:
 		DisplayText();
-		if (DialogueHandler->dialougeFinished) {
+		if (DialogueHandler->dialogueFinished) {
+
+			//send input instruction text
+			DialogueHandler->differentBetweenPlayers = true;
+			DialogueHandler->sendNewdialogueSequence(inputs1, inputDurations);
+			DialogueHandler->paused = true;
+			DialogueHandler->dialogueFinished = true;
+
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
+				DialogueHandler->differentBetweenPlayers = false;
 				dialogueSent = false;
 			}
 		}
 		break;
+
+	case 5:
+		//DisplayText[text1, text2, text3] //end of tutorial text
+		//When text is done, move onwards
+		DisplayText();
+		if (DialogueHandler->dialogueFinished) {
+			Step++;
+			dialogueSent = false;
+		}
+		break;
+
 	default:
 		break;
 	}

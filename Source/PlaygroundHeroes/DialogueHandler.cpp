@@ -12,6 +12,7 @@ ADialogueHandler::ADialogueHandler()
 
 	renderWidget = false;
 	paused = true;
+	differentBetweenPlayers = false;
 
 	timeSinceLastLineChange = 0.0f;
 	lineNumber = 0;
@@ -31,7 +32,11 @@ void ADialogueHandler::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<float> durations) {
+void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations) {
+	if (lines.Num() <= 0) {
+		UE_LOG(LogTemp, Error, TEXT("CUSTOM: gave empty TArray to sendNewDialogueSequence"));
+		return;
+	}
 	maxLines = lines.Num();
 
 	//clearing out old dialogue and durations
@@ -42,20 +47,38 @@ void ADialogueHandler::sendNewDialougeSequence(TArray<FString> lines, TArray<flo
 	dialogueLines.Append(lines);
 	dialogueDurations.Append(durations);
 
-	//Set default values for new dialouge sequence
+	//Set default values for new dialogue sequence
 	timeSinceLastLineChange = 0.0f;
 	lineNumber = 0;
 	paused = false;
-	dialougeFinished = false;
+	dialogueFinished = false;
 	renderWidget = true;
 
-	//sampleText is the text that is sent to the Widget. Sets sampleText to first lnie of Dialogue
-	if (dialogueLines.IsValidIndex(lineNumber)) {
-		sampleText = dialogueLines[lineNumber];
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+	//sampleText or player1&2 text are the text that is sent to the Widget. Sets text to first lines of dialogue
+	if (differentBetweenPlayers) {
+		sampleText = " ";
+		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
+			player1Text = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
+
+			lineNumber++;
+			player2Text = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
+		}
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Index %d is invalid"), lineNumber);
+		player1Text = " ";
+		player2Text = " ";
+		if (dialogueLines.IsValidIndex(lineNumber)) {
+			sampleText = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+		}
 	}
 
 }
@@ -79,14 +102,32 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 		//check if duration for current line is finished
 		if (timeSinceLastLineChange >= delayFor) {
 			lineNumber++;
+			//Set new text
+			if (differentBetweenPlayers) {
+				sampleText = " ";
 
-			//Set sampleText to the next line
-			if (dialogueLines.IsValidIndex(lineNumber)) {
-				sampleText = dialogueLines[lineNumber];
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+				if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber+1)) {
+					player1Text = dialogueLines[lineNumber];
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
+
+					lineNumber++;
+					player2Text = dialogueLines[lineNumber];
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber-1, lineNumber);
+				}
 			}
 			else {
-				UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+				player1Text = " ";
+				player2Text = " ";
+				if (dialogueLines.IsValidIndex(lineNumber)) {
+					sampleText = dialogueLines[lineNumber];
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+				}
+				else {
+					UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+				}
 			}
 			//reset time counter
 			timeSinceLastLineChange = 0.0f;
@@ -95,17 +136,15 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 	else {
 		renderWidget = false;
 		paused = true;
-		dialougeFinished = true;
+		dialogueFinished = true;
 	}
 }
 
 void ADialogueHandler::pauseDialogue() {
 	paused = true;
-	renderWidget = false;
 }
 void ADialogueHandler::resumeDialogue() {
 	paused = false;
-	renderWidget = true;
 }
 int ADialogueHandler::getLineNumber() {
 	return lineNumber;

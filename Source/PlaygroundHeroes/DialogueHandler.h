@@ -22,6 +22,12 @@ public:
 		FString sampleText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString player1Text;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FString player2Text;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<FString> dialogueLines;
 	//TArray<FText> dialogueLines;
 
@@ -29,13 +35,17 @@ public:
 		TArray<float> dialogueDurations;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool dialougeFinished;
+		bool dialogueFinished;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool renderWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool paused;
+
+	//Toggles putting different dialogue on each players screen. Uses 2 dialogue lines.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool differentBetweenPlayers;
 
 protected:
 	// Called when the game starts or when spawned
@@ -51,7 +61,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		void sendNewDialougeSequence(TArray<FString> lines, TArray<float> durations);
+		void sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations);
 
 	UFUNCTION(BlueprintCallable)
 		void updateDialogue(float DeltaTime);

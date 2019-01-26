@@ -35,8 +35,59 @@ public:
 	bool canAdvance;
 	bool dialogueSent;
 
-
 	void DisplayText();
+
+	//Hold sequences of dialouge (switch after each input listener runs)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 0")
+		TArray<FString> lines0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 0")
+		TArray<float> durations0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 1")
+		TArray<FString> lines1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 1")
+		TArray<float> durations1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 2")
+		TArray<FString> lines2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 2")
+		TArray<float> durations2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 3")
+		TArray<FString> lines3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 3")
+		TArray<float> durations3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 4")
+		TArray<FString> lines4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 4")
+		TArray<float> durations4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 4")
+		TArray<FString> lines5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 4")
+		TArray<float> durations5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "InputText")
+		TArray<FString> inputs0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "InputText")
+		TArray<FString> inputs1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "InputText")
+		TArray<FString> inputs2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "InputText")
+		TArray<FString> inputs3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "InputText")
+		TArray<float> inputDurations;
 
 
 protected:
