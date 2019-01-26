@@ -19,35 +19,35 @@ AJTutorial::AJTutorial()
 	durations0.Add(3.0);
 
 	lines1.Add("LEILA: Now, although we may be the strongest fighters in all the land, we still need to practice!");
-	lines1.Add("LEILA: We can’t be rusty when we battle Zorrander.");
-	lines1.Add("LEILA: First let’s get used to moving around in our armor again.");
+	lines1.Add("LEILA: We can't be rusty when we battle Zorrander.");
+	lines1.Add("LEILA: First let's get used to moving around in our armor again.");
 	inputDurations.Add(3.0);
 
 	inputs0.Add("<Player 1: Use left stick to move>");
 	inputs0.Add("<Player 2: Use left stick to move>");
 
-	lines2.Add("ABIGAIL: Bet you can’t hit me with your sword!");
-	lines2.Add("LEILA: Oh yeah? We’ll see about that!");
+	lines2.Add("ABIGAIL: Bet you can't hit me with your sword!");
+	lines2.Add("LEILA: Oh yeah? We'll see about that!");
 
 	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
 	inputs1.Add("<Player 1: Hold the RT and push the Left Stick in a direction to Dodge>");
 
-	lines3.Add("LEILA: Nice job! I think we’re almost ready for our adventure. ");
+	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
 	lines3.Add("LEILA: Now try to hit me with an arrow!");
 	lines3.Add("ABIGAIL: Ok, stand back!");
 
 	inputs2.Add("<Player 1: Right Stick to Lock On to a target. Hold RB to charge an arrow, release to Shoot>");
 	inputs2.Add("<Player 2: Hold the RT and push the Left Stick in a direction to Dodge>");
 
-	lines4.Add("ABIGAIL: Even though we haven’t battled in ages, it’s all coming back to me now.");
-	lines4.Add("ABIGAIL: Why don’t you try blocking an arrow with your shield?");
+	lines4.Add("ABIGAIL: Even though we haven't battled in ages, it's all coming back to me now.");
+	lines4.Add("ABIGAIL: Why don't you try blocking an arrow with your shield?");
 
 	inputs3.Add("<Player 1: Hold RB to charge an arrow, release to Shoot>");
 	inputs3.Add("<Player 2: Hold the LB to Block an incoming attack>");
 
 	lines5.Add("LEILA: *huffs* Good fight.");
-	lines5.Add("LEILA: We can keep training if you’d like,");
-	lines5.Add("but I think we’re about ready to head into the forest.");
+	lines5.Add("LEILA: We can keep training if you'd like,");
+	lines5.Add("but I think we're about ready to head into the forest.");
 }
 
 // Called when the game starts or when spawned
