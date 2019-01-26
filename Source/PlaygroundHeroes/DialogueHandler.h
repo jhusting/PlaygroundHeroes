@@ -19,7 +19,7 @@ public:
 	ADialogueHandler();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FString sampleText;
+		FString centerText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString player1Text;
@@ -45,11 +45,14 @@ public:
 
 	//Toggles putting different dialogue on each players screen. Uses 2 dialogue lines.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool differentBetweenPlayers;
+		bool splitMode;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//helper function for updateDialogue
+	void setNewText();
 
 	float defaultDuration;
 	float timeSinceLastLineChange;
@@ -60,6 +63,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Send a new Sequence of dialogue lines to interate through
 	UFUNCTION(BlueprintCallable)
 		void sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations);
 
@@ -67,11 +71,21 @@ public:
 		void updateDialogue(float DeltaTime);
 
 	UFUNCTION(BlueprintCallable)
-		void pauseDialogue();
+		void pause();
 	
 	UFUNCTION(BlueprintCallable)
-		void resumeDialogue();
+		void resume();
 
 	UFUNCTION(BlueprintCallable)
 		int getLineNumber();
+
+	UFUNCTION(BlueprintCallable)
+		void goToNext();
+
+	UFUNCTION(BlueprintCallable)
+		void goToLine(int newLineNumber);
+
+	//determines whether displays center text or different text for each player
+	UFUNCTION(BlueprintCallable)
+		void toggleSplitMode(bool enabled);
 };

@@ -12,7 +12,7 @@ ADialogueHandler::ADialogueHandler()
 
 	renderWidget = false;
 	paused = true;
-	differentBetweenPlayers = false;
+	splitMode = false;
 
 	timeSinceLastLineChange = 0.0f;
 	lineNumber = 0;
@@ -54,9 +54,9 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	dialogueFinished = false;
 	renderWidget = true;
 
-	//sampleText or player1&2 text are the text that is sent to the Widget. Sets text to first lines of dialogue
-	if (differentBetweenPlayers) {
-		sampleText = " ";
+	//centerText or player1&2 text are the text that is sent to the Widget. Sets text to first lines of dialogue
+	if (splitMode) {
+		centerText = " ";
 		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
 			player1Text = dialogueLines[lineNumber];
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
@@ -73,8 +73,8 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 		player1Text = " ";
 		player2Text = " ";
 		if (dialogueLines.IsValidIndex(lineNumber)) {
-			sampleText = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
+			centerText = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
 		}
 		else {
 			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
@@ -82,6 +82,7 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	}
 
 }
+
 
 void ADialogueHandler::updateDialogue(float DeltaTime) {
 	if (paused) return; //Keep updateDialogue from running if paused.
@@ -102,35 +103,7 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 		//check if duration for current line is finished
 		if (timeSinceLastLineChange >= delayFor) {
 			lineNumber++;
-			//Set new text
-			if (differentBetweenPlayers) {
-				sampleText = " ";
-
-				if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber+1)) {
-					player1Text = dialogueLines[lineNumber];
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
-
-					lineNumber++;
-					player2Text = dialogueLines[lineNumber];
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
-				}
-				else {
-					UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber-1, lineNumber);
-				}
-			}
-			else {
-				player1Text = " ";
-				player2Text = " ";
-				if (dialogueLines.IsValidIndex(lineNumber)) {
-					sampleText = dialogueLines[lineNumber];
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *sampleText);
-				}
-				else {
-					UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
-				}
-			}
-			//reset time counter
-			timeSinceLastLineChange = 0.0f;
+			setNewText();
 		}
 	}
 	else {
@@ -140,13 +113,63 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 	}
 }
 
-void ADialogueHandler::pauseDialogue() {
+void ADialogueHandler::setNewText() {
+	UE_LOG(LogTemp, Warning, TEXT("lineNumber = %d"), lineNumber);
+	if (splitMode) {
+		//make centerText blank
+		centerText = " ";
+
+		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
+			player1Text = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
+
+			lineNumber++;
+			player2Text = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
+		}
+	}
+	else {
+		//Make player specific text blank
+		player1Text = " ";
+		player2Text = " ";
+		if (dialogueLines.IsValidIndex(lineNumber)) {
+			centerText = dialogueLines[lineNumber];
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+		}
+	}
+	//reset time counter
+	timeSinceLastLineChange = 0.0f;
+
+}
+
+void ADialogueHandler::pause() {
 	paused = true;
 }
-void ADialogueHandler::resumeDialogue() {
+void ADialogueHandler::resume() {
 	paused = false;
 }
 int ADialogueHandler::getLineNumber() {
 	return lineNumber;
+}
+void  ADialogueHandler::goToNext() {
+	if (splitMode) {
+		lineNumber += 2; 
+	}
+	else {
+		lineNumber++;
+	}
+}
+void ADialogueHandler::goToLine(int newLineNumber) {
+	lineNumber = newLineNumber;
+}
+
+void ADialogueHandler::toggleSplitMode(bool enabled) {
+	splitMode = enabled;
 }
 

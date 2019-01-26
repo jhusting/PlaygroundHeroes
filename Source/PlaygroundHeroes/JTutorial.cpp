@@ -198,16 +198,15 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->differentBetweenPlayers = true;
+			DialogueHandler->toggleSplitMode(true);
 			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
-			DialogueHandler->paused = true;
+			DialogueHandler->pause();
 			DialogueHandler->dialogueFinished = true;
 
 			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0
 				|| knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) {
 				Step++;
-				DialogueHandler->differentBetweenPlayers = false;
-				DialogueHandler->paused = false;
+				DialogueHandler->toggleSplitMode(false);
 				dialogueSent = false;
 			}
 		}
@@ -217,15 +216,15 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->differentBetweenPlayers = true;
-			DialogueHandler->sendNewdialogueSequence(inputs1, inputDurations);
-			DialogueHandler->paused = true;
+			DialogueHandler->toggleSplitMode(true);
+			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
+			DialogueHandler->pause();
 			DialogueHandler->dialogueFinished = true;
 			
 			if (/*knight->GetLockTarget() &&*/ (knight->GetInputAttack() || knight->GetAttacking()) 
 				&& (archer->GetInputDodge() || archer->GetDodging() ) ) {
 				Step++;
-				DialogueHandler->differentBetweenPlayers = false;
+				DialogueHandler->toggleSplitMode(false);
 				dialogueSent = false;
 			}
 		}
@@ -235,15 +234,15 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->differentBetweenPlayers = true;
-			DialogueHandler->sendNewdialogueSequence(inputs2, inputDurations);
-			DialogueHandler->paused = true;
+			DialogueHandler->toggleSplitMode(true);
+			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
+			DialogueHandler->pause();
 			DialogueHandler->dialogueFinished = true;
 
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
-				DialogueHandler->differentBetweenPlayers = false;
+				DialogueHandler->toggleSplitMode(false);
 				dialogueSent = false;
 			}
 		}
@@ -254,15 +253,15 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->differentBetweenPlayers = true;
-			DialogueHandler->sendNewdialogueSequence(inputs1, inputDurations);
-			DialogueHandler->paused = true;
+			DialogueHandler->toggleSplitMode(true);
+			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
+			DialogueHandler->pause();
 			DialogueHandler->dialogueFinished = true;
 
 			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
 				&& (knight->GetInputDodge() || knight->GetDodging() )) {
 				Step++;
-				DialogueHandler->differentBetweenPlayers = false;
+				DialogueHandler->toggleSplitMode(false);	
 				dialogueSent = false;
 			}
 		}
