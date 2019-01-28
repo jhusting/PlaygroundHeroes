@@ -21,6 +21,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float maxHealth;
 
 public:
 	// Called every frame

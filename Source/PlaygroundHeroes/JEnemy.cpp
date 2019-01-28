@@ -10,6 +10,7 @@ AJEnemy::AJEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Health = 100.f;
+	maxHealth = Health;
 }
 
 // Called when the game starts or when spawned
