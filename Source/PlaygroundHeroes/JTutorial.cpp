@@ -13,10 +13,27 @@ AJTutorial::AJTutorial()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//set default dialogue lines:
-	lines0.Add("introText 1");	
-	lines0.Add("introText 2"); 
-	lines0.Add("introText 3");
-	durations0.Add(3.0);
+	lines0.Add("ABIGAIL: *sighs* Leila I'm bored. Can you tell me a story?");	
+	lines0.Add("LEILA: Well sure... uh, let's see.... Once upon a time there were two valiant heroes: Leila, and her younger sister, Abigail. "); 
+	lines0.Add("LEILA: Throughout the lands they were known to be the strongest-");
+	lines0.Add("ABIGAIL: No not that one, I've heard it a million times. Something new!");
+	lines0.Add("LEILA: Okay, okay. Something new.... ");
+	lines0.Add("LEILA: After Leila and Abigail saved the kingdom from the evil prince, they thought their fighting days were over. ");
+	lines0.Add("LEILA: The kingdom was safer than ever, and it seemed that the two heroes no longer had much of a job to do. ");
+	lines0.Add("LEILA: Without any threats to the kingdom, they retired from battle and spent most of their days ");
+	lines0.Add("LEILA: assisting villagers throughout the kingdom. ");
+	lines0.Add("LEILA: Until one day...");
+	lines0.Add("LEILA: A dark wizard entered the realm. The joy and beauty he saw throughout the land disgusted him, and he vowed to destroy it.");
+	lines0.Add("LEILA: His name was......");
+	lines0.Add("ABIGAIL: Zorrander!");
+	lines0.Add("LEILA: Yes! His name was... Zorrander.");
+	lines0.Add("LEILA: Zorrander retreated to his lair in the forest, ");
+	lines0.Add("LEILA: where he began brewing a curse so terrible that it would suck all happiness from the kingdom, ");
+	lines0.Add("LEILA: leaving only hatred and misery. There were only two people in the land that were possibly strong enough to stop him... ");
+	lines0.Add("LEILA: Leila and Abigail!");
+	lines0.Add("LEILA: Now what do you say, are the two heroes brave enough to go on this quest?");
+	lines0.Add("ABIGAIL: Of course they are! They have to defeat Zorrander!");
+	lines0.Add("LEILA: Alright then, Abigail. We must prepare for our adventure into the forest!");
 
 	lines1.Add("LEILA: Now, although we may be the strongest fighters in all the land, we still need to practice!");
 	lines1.Add("LEILA: We can't be rusty when we battle Zorrander.");
@@ -48,6 +65,29 @@ AJTutorial::AJTutorial()
 	lines5.Add("LEILA: *huffs* Good fight.");
 	lines5.Add("LEILA: We can keep training if you'd like,");
 	lines5.Add("but I think we're about ready to head into the forest.");
+
+	inputs4.Add("<Player 1: Take any action>");
+	inputs4.Add("<Player 2: Take any action>");
+
+	lines6.Add("LEILA: Now we have to be careful on our journey to find Zorrander,");
+	lines6.Add("LEILA: he's going to do everything in his power to stop us from reaching him.");
+	lines6.Add("LEILA: What do we know about him?");
+	lines6.Add("ABIGAIL: Well, when he learned that the two strongest heroes were on their way to his lair,");
+	lines6.Add("ABIGAIL: he got scared that his evil plans would be ruined! ");
+	lines6.Add("ABIGAIL: So, to protect himself he created powerful monsters to guard the forest and stop us from reaching him.");
+	lines6.Add("LEILA: Like that will stop us!");
+	lines6.Add("ABIGAIL: Of course it won't! But he believed that only the purest evil would be strong enough to stop us... ");
+	lines6.Add("ABIGAIL: so he created each monster using a piece of his black heart. The monsters are all a part of him.");
+	lines6.Add("LEILA: Hmm so that must mean if we defeat the monsters Zorrander becomes weaker?");
+	lines6.Add("ABIGAIL: Yes, but each monster will try their best to keep us out of the forest.");
+	lines6.Add("ABIGAIL: They can see our deepest darkest fears and will use that to try and scare us away.");
+	lines6.Add("LEILA: ...They know our deepest darkest fears...?");
+	lines6.Add("ABIGAIL: Yup but that's ok because we're the bravest heroes!");
+	lines6.Add("LEILA: You're right, they won't scare us.");
+	lines6.Add("ABIGAIL: Leila, what's your greatest fear?");
+	lines6.Add("LEILA: ... My greatest fear is... losing you.");
+	lines6.Add("ABIGAIL: Losing me? That seems pretty lame. Don't worry, we'll always be together! Right?");
+	lines6.Add("LEILA: Of course silly... ");
 }
 
 // Called when the game starts or when spawned
@@ -136,6 +176,13 @@ void AJTutorial::DisplayText() {
 	case 5:
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines5, durations5);
+			dialogueSent = true;
+		}
+		break;
+
+	case 6:
+		if (!dialogueSent) {
+			DialogueHandler->sendNewdialogueSequence(lines6, durations6);
 			dialogueSent = true;
 		}
 		break;
@@ -268,6 +315,21 @@ void AJTutorial::Tick(float DeltaTime)
 	case 5:
 		//DisplayText[text1, text2, text3] //end of tutorial text
 		//When text is done, move onwards
+		DisplayText();
+		if (DialogueHandler->dialogueFinished) {
+			sendInputText(inputs4, inputDurations);
+
+			if (archer->GetInputAttack() || archer->GetAttacking() || archer->GetInputDodge() || archer->GetDodging()) ArcherDidInput = true;
+			if (knight->GetInputAttack() || knight->GetAttacking() || knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+			if (KnightDidInput && ArcherDidInput) {
+				postInput();
+				Step++;
+				dialogueSent = false;
+			}
+		}
+		break;
+
+	case 6:
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
 			Step++;

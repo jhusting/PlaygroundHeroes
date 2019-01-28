@@ -46,6 +46,8 @@ public:
 
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
 
+	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
