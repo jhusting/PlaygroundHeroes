@@ -180,7 +180,7 @@ void AJArcher::Attack()
 
 				mArrow->AttachToComponent((USceneComponent *)GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), FName("LeftHandSocket"));
 
-				FTransform newTrans = FTransform(FRotator(-9.463848f, -73.49968f, -0.328553f), FVector(-3.176191f, 32.43071f, 10.986347f), FVector(.75f, .75f, .75f));
+				FTransform newTrans = FTransform(FRotator(7.547618f, -19.68359f, 167.739868f), FVector(-31.770372f, 4.233968f, -6.596308f), FVector(.75f, .75f, .75f));
 				mArrow->SetActorRelativeTransform(newTrans);
 			}
 		}
