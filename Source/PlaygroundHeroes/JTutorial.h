@@ -34,8 +34,14 @@ public:
 	//If false, not even the correct input will advance to the next stage. Intented for use to make sure any events (dialog, cutscene, etc) are fully done, before allowing continuation
 	bool canAdvance;
 	bool dialogueSent;
+	bool inputSent;
+	bool KnightDidInput;
+	bool ArcherDidInput;
 
 	void DisplayText();
+
+	void sendInputText(TArray<FString> inputs, TArray<float> inputDuration);
+	void postInput();
 
 	//Hold sequences of dialouge (switch after each input listener runs)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "Sequence 0")

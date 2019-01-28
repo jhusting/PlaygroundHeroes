@@ -29,8 +29,8 @@ AJTutorial::AJTutorial()
 	lines2.Add("ABIGAIL: Bet you can't hit me with your sword!");
 	lines2.Add("LEILA: Oh yeah? We'll see about that!");
 
-	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
 	inputs1.Add("<Player 1: Hold the RT and push the Left Stick in a direction to Dodge>");
+	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
 
 	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
 	lines3.Add("LEILA: Now try to hit me with an arrow!");
@@ -56,6 +56,9 @@ void AJTutorial::BeginPlay()
 	Super::BeginPlay();
 	//	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AJKnight::StaticClass(), KnightActor);
 	//	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AJArcher::StaticClass(), ArcherActor);
+	dialogueSent = false;
+	inputSent = false;
+
 	for (TActorIterator<AActor> itr(GetWorld()); itr; ++itr)
 	{
 		AJKnight* const KnightItr = Cast<AJKnight>(*itr);
@@ -198,15 +201,14 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->toggleSplitMode(true);
-			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
-			DialogueHandler->pause();
-			DialogueHandler->dialogueFinished = true;
+			sendInputText(inputs0, inputDurations);
 
-			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0
-				|| knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) {
+			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0) ArcherDidInput = true;
+			if (knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) KnightDidInput = true;
+
+			if (KnightDidInput && ArcherDidInput){
+				postInput();
 				Step++;
-				DialogueHandler->toggleSplitMode(false);
 				dialogueSent = false;
 			}
 		}
@@ -216,15 +218,13 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->toggleSplitMode(true);
-			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
-			DialogueHandler->pause();
-			DialogueHandler->dialogueFinished = true;
-			
-			if (/*knight->GetLockTarget() &&*/ (knight->GetInputAttack() || knight->GetAttacking()) 
-				&& (archer->GetInputDodge() || archer->GetDodging() ) ) {
+			sendInputText(inputs1, inputDurations);
+			if (knight->GetIsLocked() && (knight->GetInputAttack() || knight->GetAttacking())) KnightDidInput = true;
+			if ((archer->GetInputDodge() || archer->GetDodging())) ArcherDidInput = true;
+
+			if (KnightDidInput && ArcherDidInput) {
+				postInput();
 				Step++;
-				DialogueHandler->toggleSplitMode(false);
 				dialogueSent = false;
 			}
 		}
@@ -234,15 +234,14 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->toggleSplitMode(true);
-			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
-			DialogueHandler->pause();
-			DialogueHandler->dialogueFinished = true;
+			sendInputText(inputs2, inputDurations);
 
-			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
-				&& (knight->GetInputDodge() || knight->GetDodging() )) {
-				Step++;
-				DialogueHandler->toggleSplitMode(false);
+			if (archer->GetIsLocked() && (archer->GetInputAttack() || archer->GetAttacking())) ArcherDidInput = true;
+			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+
+			if (KnightDidInput && ArcherDidInput) {
+				postInput();
+				Step++;				
 				dialogueSent = false;
 			}
 		}
@@ -253,15 +252,14 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 
 			//send input instruction text
-			DialogueHandler->toggleSplitMode(true);
-			DialogueHandler->sendNewdialogueSequence(inputs0, inputDurations);
-			DialogueHandler->pause();
-			DialogueHandler->dialogueFinished = true;
+			sendInputText(inputs3, inputDurations);
 
-			if (/*archer->GetLockTarget() &&*/ (archer->GetInputAttack() || archer->GetAttacking())
-				&& (knight->GetInputDodge() || knight->GetDodging() )) {
-				Step++;
-				DialogueHandler->toggleSplitMode(false);	
+			if (archer->GetIsLocked() && (archer->GetInputAttack() || archer->GetAttacking())) ArcherDidInput = true;
+			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+
+			if (KnightDidInput && ArcherDidInput) {
+				postInput();
+				Step++;	
 				dialogueSent = false;
 			}
 		}
@@ -281,3 +279,24 @@ void AJTutorial::Tick(float DeltaTime)
 		break;
 	}
 }
+
+//Enacts changes in DialogueHandler for Input Prompt text and sends text
+void AJTutorial::sendInputText(TArray<FString> inputs, TArray<float> inputDuration) {
+	if (!inputSent) {
+		DialogueHandler->toggleSplitMode(true);
+		DialogueHandler->sendNewdialogueSequence(inputs, inputDuration);
+		DialogueHandler->pause();
+		DialogueHandler->dialogueFinished = true;
+		inputSent = true;
+	}
+}
+
+//Readies JTutorial for sending text after an input prompt
+void AJTutorial::postInput() {
+	KnightDidInput = false;
+	ArcherDidInput = false;
+	DialogueHandler->toggleSplitMode(false);
+	inputSent = false;
+}
+
+

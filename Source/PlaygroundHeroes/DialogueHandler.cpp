@@ -8,7 +8,7 @@ ADialogueHandler::ADialogueHandler()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
-	defaultDuration = 2.0f;
+	defaultDuration = 4.0f;
 
 	renderWidget = false;
 	paused = true;
