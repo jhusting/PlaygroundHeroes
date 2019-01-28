@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "JArcher.h"
 #include "JKnight.h"
+#include "DialogueHandler.h"
 #include "Components/InputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -26,13 +27,50 @@ public:
 
 	AJKnight* knight;
 	AJArcher* archer;
+	ADialogueHandler* DialogueHandler;
 
 	int Step;
 
 	//If false, not even the correct input will advance to the next stage. Intented for use to make sure any events (dialog, cutscene, etc) are fully done, before allowing continuation
 	bool canAdvance;
+	bool dialogueSent;
+	bool inputSent;
+	bool KnightDidInput;
+	bool ArcherDidInput;
 
 	void DisplayText();
+
+	void sendInputText(TArray<FString> inputs, TArray<float> inputDuration);
+	void postInput();
+
+	//Hold sequences of dialouge (switch after each input listener runs)
+	TArray<FString> lines0;
+	TArray<float> durations0;
+
+	TArray<FString> lines1;
+	TArray<float> durations1;
+
+	TArray<FString> lines2;
+	TArray<float> durations2;
+
+	TArray<FString> lines3;
+	TArray<float> durations3;
+
+	TArray<FString> lines4;
+	TArray<float> durations4;
+
+	TArray<FString> lines5;
+	TArray<float> durations5;
+
+	TArray<FString> lines6;
+	TArray<float> durations6;
+
+	TArray<FString> inputs0;
+	TArray<FString> inputs1;
+	TArray<FString> inputs2;
+	TArray<FString> inputs3;
+	TArray<FString> inputs4;
+	TArray<float> inputDurations;
 
 
 protected:

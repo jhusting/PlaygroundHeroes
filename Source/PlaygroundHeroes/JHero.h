@@ -44,7 +44,9 @@ public:
 
 	FORCEINLINE FVector GetInputDirection() const {return InputDirection;}
 
-//	FORCEINLINE AJEnemy* GetLockTarget() { return lockTarget; }
+	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
+
+	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
