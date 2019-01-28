@@ -10,13 +10,14 @@ AJEnemy::AJEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Health = 100.f;
-	maxHealth = Health;
 }
 
 // Called when the game starts or when spawned
 void AJEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	maxHealth = Health;
+	HealthPercent = 1.0f;
 
 }
 
@@ -24,7 +25,7 @@ void AJEnemy::BeginPlay()
 void AJEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	HealthPercent = Health / maxHealth;
 }
 
 void AJEnemy::SetHealth(float NewHealth)
