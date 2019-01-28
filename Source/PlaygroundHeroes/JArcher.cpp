@@ -64,8 +64,8 @@ void AJArcher::Tick(float DeltaTime)
 
 	/*if (bDodging)
 	{
-		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
-		SetActorLocation(NewLocation, true);
+		//FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
+		//SetActorLocation(NewLocation, true);
 	}*/
 
 	if (!bDodging)
