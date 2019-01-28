@@ -254,7 +254,7 @@ void AJTutorial::Tick(float DeltaTime)
 			//send input instruction text
 			sendInputText(inputs3, inputDurations);
 
-			if (archer->GetIsLocked() && (archer->GetInputAttack() || archer->GetAttacking())) ArcherDidInput = true;
+			if (archer->GetInputAttack() || archer->GetAttacking()) ArcherDidInput = true;
 			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
 
 			if (KnightDidInput && ArcherDidInput) {
