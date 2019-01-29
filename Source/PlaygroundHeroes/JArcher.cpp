@@ -193,27 +193,36 @@ void AJArcher::ReleaseAttack()
 {
 	if (bAttacking)
 	{
-		//do stuff
-		//mArrow->DetachRootComponentFromParent(true);
+		// First detach the arrow from our socket
 		mArrow->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false));
+		// Then get it's Projectile Movement Component
 		UProjectileMovementComponent* proj = (UProjectileMovementComponent*)mArrow->GetComponentByClass(UProjectileMovementComponent::StaticClass());
 
+		// Now we do a raytrace from the camera outwards 
 		FCollisionQueryParams RV_TraceParams;
-
-		//Re-initialize hit info
 		FHitResult RV_Hit(ForceInit);
 
 		FVector Start = GetCameraBoom()->GetSocketTransform(USpringArmComponent::SocketName).GetLocation();
 		FVector End = Start + (GetFollowCamera()->GetForwardVector()) * 10000;
 
+		// This is the actual raytrace. The info of the trace is stored in RV_Hit
 		GetWorld()->LineTraceSingleByChannel(RV_Hit, Start, End, ECC_Visibility);
 
+		// Now we try to look at the hit, and rotate the arrow to point towards it
 		FRotator lookAt = UKismetMathLibrary::FindLookAtRotation(mArrow->GetActorLocation(), RV_Hit.ImpactPoint);
-		//UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f"), RV_Hit.ImpactPoint.X, RV_Hit.ImpactPoint.Y, RV_Hit.ImpactPoint.Z);
-		//DrawDebugLine(GetWorld(), Start, End, FColor::Red, true, 100.f, (uint8)'\000', 2.f);
 		mArrow->SetActorRotation(lookAt);
 
+		// This is the ratio of how long we've held the button. Time Held / Total time needed to hold to get to max strength
 		float heldRatio = FMath::Clamp(timeHeld / HoldTimeNeeded, 0.f, 1.f);
+
+		// Now we need to get the arrowBP's "ArrowDamage" property
+		UProperty* Property = mArrow->GetClass()->FindPropertyByName("ArrowDamage");
+		if (Property) // If we successfully found that property
+		{
+			float* currDamage = Property->ContainerPtrToValuePtr<float>(mArrow);
+			if (currDamage) //If the value has been initialized
+				*currDamage = 15.f + 20.f * heldRatio; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+		}
 
 		proj->SetVelocityInLocalSpace(FVector(BaseArrowSpeed + HeldSpeedAdded*heldRatio, 0.f, 0.f));
 		proj->bSimulationEnabled = true;
