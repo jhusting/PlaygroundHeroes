@@ -19,8 +19,21 @@ public:
 	
 protected:
 	/*
-	True when the player is currently in an attack animation
+		True when the player is currently in an attack animation, and can cause damage
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bCanDamage;
+
+	/*
+		True when the player is blocking
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bBlocking;
+
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// End of APawn interface
+
+	void Block();
+	void BlockReleased();
 };

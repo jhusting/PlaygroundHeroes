@@ -96,9 +96,13 @@ void AJHero::Tick(float DeltaTime)
 		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
 		SetActorLocation(NewLocation, true);
 	}
-
-	if (!bDodging && !bAttacking)
-		Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
+	else
+	{
+		if (!bAttacking)
+			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
+		else
+			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, 100.f);
+	}
 }
 
 // Called to bind functionality to input
