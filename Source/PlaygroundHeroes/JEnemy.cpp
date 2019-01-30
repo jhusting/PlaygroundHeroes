@@ -16,6 +16,8 @@ AJEnemy::AJEnemy()
 void AJEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	maxHealth = Health;
+	HealthPercent = 1.0f;
 
 }
 
@@ -23,7 +25,7 @@ void AJEnemy::BeginPlay()
 void AJEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	HealthPercent = Health / maxHealth;
 }
 
 void AJEnemy::SetHealth(float NewHealth)

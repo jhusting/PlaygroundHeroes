@@ -75,3 +75,8 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+
+#User Specified Folders
+Content/Maps/TestMap.umap
+Content/Temp/*
