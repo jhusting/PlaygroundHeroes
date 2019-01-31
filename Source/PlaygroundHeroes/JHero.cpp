@@ -321,3 +321,8 @@ void AJHero::LockCameraHelper()
 
 	SetActorRotation(PlayerRotation);
 }
+
+void AJHero::AddHealth(float Change)
+{
+	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
+}

@@ -105,6 +105,7 @@ protected:
 	// Handler for when the camera is to be locked
 	void LockCamera();
 
+	
 	// True when the camera is locked
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "JCamera")
 	bool bIsLocked;
@@ -188,5 +189,9 @@ protected:
 		NULL when you are not locked on
 	*/
 	class AJEnemy* lockTarget;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void AddHealth(float Change);
 
 };
