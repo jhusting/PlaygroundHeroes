@@ -16,7 +16,7 @@
 
 AJArcher::AJArcher()
 {
-	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/ArrowBP"));
+	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/Warriors/ArrowBP"));
 	if (ArrowBPClass.Class != NULL)
 	{
 		ArrowBP = ArrowBPClass.Class;
