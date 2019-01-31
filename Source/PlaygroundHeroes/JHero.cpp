@@ -124,6 +124,11 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AJHero::LookUpAtRate);
 }
 
+void AJHero::AddHealth(float Change)
+{
+	Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+}
+
 void AJHero::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
