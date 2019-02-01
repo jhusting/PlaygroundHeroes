@@ -55,6 +55,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void AddHealth(float Change);
+
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();
@@ -189,9 +192,4 @@ protected:
 		NULL when you are not locked on
 	*/
 	class AJEnemy* lockTarget;
-
-public:
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-		void AddHealth(float Change);
-
 };
