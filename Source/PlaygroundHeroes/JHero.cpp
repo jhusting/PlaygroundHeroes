@@ -129,6 +129,10 @@ void AJHero::AddHealth(float Change)
 	Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
 }
 
+void AJHero::TestFunction() {
+	UE_LOG(LogClass, Warning, TEXT("Test Function"));
+}
+
 void AJHero::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
