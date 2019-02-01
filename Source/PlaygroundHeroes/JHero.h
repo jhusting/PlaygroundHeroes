@@ -47,6 +47,13 @@ public:
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
 
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
+	
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void AddHealth(float Change);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void TestFunction();
+
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
