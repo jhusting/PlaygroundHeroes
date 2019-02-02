@@ -33,7 +33,6 @@ AJArcher::AJArcher()
 
 void AJArcher::Tick(float DeltaTime)
 {
-	AddHealth(-10.f*DeltaTime);
 	if (timeHeld >= 0.f)
 		timeHeld += DeltaTime;
 
