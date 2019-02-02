@@ -141,6 +141,21 @@ protected:
 	bool bDodging;
 
 	/*
+		True when player is in state they can dodge
+		False is under conditions where dodging is disabled
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool canDodge;
+
+	/*
+		Used to give player temporary Speed boosts/debuffs
+		multiplies directional input value.
+		Default value is 1.0
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MovementModifier;
+
+	/*
 		The amount of time, in seconds, since the last player input
 		-1 when there has been no input in the last InputQueueTime seconds
 			OR if the input has been handled
