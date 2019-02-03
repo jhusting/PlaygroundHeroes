@@ -24,9 +24,10 @@ void AJEnemy::BeginPlay()
 
 void AJEnemy::UpdateHitTimes(float DeltaTime)
 {
-	for (int32 i = 0; i != RecentlyHitBy.Num(); ++i)
+	for (int32 i = 0; i < RecentlyHitByTimes.Num(); ++i)
 	{
 		RecentlyHitByTimes[i] += DeltaTime;
+		UE_LOG(LogClass, Warning, TEXT("Trying to update Array"));
 
 		if (RecentlyHitByTimes[i] >= HitTrackingTime)
 		{
@@ -49,9 +50,10 @@ void AJEnemy::SetHealth(float NewHealth)
 	Health = NewHealth;
 }
 
-void AJEnemy::AddHealth(float Change)
+void AJEnemy::AddHealth(float Change, FString MoveName)
 {
 	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
+	AddHit(MoveName);
 }
 
 void AJEnemy::AddHit(FString MoveName)
