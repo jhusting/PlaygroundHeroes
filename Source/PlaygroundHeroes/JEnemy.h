@@ -15,9 +15,17 @@ public:
 	// Sets default values for this actor's properties
 	AJEnemy();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		TArray<FString> RecentlyHitBy;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		TArray<float> RecentlyHitByTimes;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void UpdateHitTimes(float DeltaTime);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		float Health;
@@ -27,6 +35,8 @@ protected:
 		float HealthPercent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		float OldHealthPercent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		float HitTrackingTime;
 
 public:
 	// Called every frame
@@ -39,4 +49,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 		void AddHealth(float Change);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void AddHit(FString MoveName);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		bool CheckHit(FString MoveName);
 };

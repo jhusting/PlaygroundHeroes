@@ -10,6 +10,7 @@ AJEnemy::AJEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Health = 100.f;
+	HitTrackingTime = .75f;
 }
 
 // Called when the game starts or when spawned
@@ -21,11 +22,26 @@ void AJEnemy::BeginPlay()
 
 }
 
+void AJEnemy::UpdateHitTimes(float DeltaTime)
+{
+	for (int32 i = 0; i != RecentlyHitBy.Num(); ++i)
+	{
+		RecentlyHitByTimes[i] += DeltaTime;
+
+		if (RecentlyHitByTimes[i] >= HitTrackingTime)
+		{
+			RecentlyHitBy.RemoveAt(i);
+			RecentlyHitByTimes.RemoveAt(i);
+		}
+	}
+}
+
 // Called every frame
 void AJEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	HealthPercent = Health / maxHealth;
+	UpdateHitTimes(DeltaTime);
 }
 
 void AJEnemy::SetHealth(float NewHealth)
@@ -36,4 +52,22 @@ void AJEnemy::SetHealth(float NewHealth)
 void AJEnemy::AddHealth(float Change)
 {
 	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
+}
+
+void AJEnemy::AddHit(FString MoveName)
+{
+	if (!RecentlyHitBy.Contains(MoveName))
+	{
+		RecentlyHitBy.Add(MoveName);
+		RecentlyHitByTimes.Add(0.f);
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("Warning: Trying to add a hit that is already an element of RecentlyHitBy"));
+	}
+}
+
+bool AJEnemy::CheckHit(FString MoveName)
+{
+	return RecentlyHitBy.Contains(MoveName);
 }
