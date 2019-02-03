@@ -65,6 +65,7 @@ AJHero::AJHero()
 	MovementModifier = 1.0f;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
+	bCanBeDamaged = true;
 
 }
 

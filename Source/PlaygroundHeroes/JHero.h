@@ -214,4 +214,10 @@ protected:
 		NULL when you are not locked on
 	*/
 	class AJEnemy* lockTarget;
+
+	// The current hit type we are on
+	// Knight Move Names: KnightAttack1, KnightAttack2, KnightAttack3
+	// Archer Move Names: ArcherHit1
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	FString CurrentHitType;
 };
