@@ -61,6 +61,8 @@ AJHero::AJHero()
 	bAttacking = false;
 	bInputtingDodge = false;
 	bDodging = false;
+	canDodge = true;
+	MovementModifier = 1.0f;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
 
@@ -155,6 +157,7 @@ void AJHero::MoveForward(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.X = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
 		// find out which way is forward
@@ -172,6 +175,7 @@ void AJHero::MoveRight(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.Y = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
 		// find out which way is right
@@ -230,8 +234,9 @@ void AJHero::Dodge()
 	{
 		bInputtingAttack = false;
 	}
-
-	DodgeHelper();
+	if (canDodge) {
+		DodgeHelper();
+	}
 }
 
 bool AJHero::DodgeHelper()
@@ -329,4 +334,9 @@ void AJHero::LockCameraHelper()
 	PlayerRotation.Yaw = Rotation.Yaw;
 
 	SetActorRotation(PlayerRotation);
+}
+
+void AJHero::AddHealth(float Change)
+{
+	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
 }

@@ -62,6 +62,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void AddHealth(float Change);
+
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();
@@ -112,6 +115,7 @@ protected:
 	// Handler for when the camera is to be locked
 	void LockCamera();
 
+	
 	// True when the camera is locked
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "JCamera")
 	bool bIsLocked;
@@ -142,6 +146,21 @@ protected:
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bDodging;
+
+	/*
+		True when player is in state they can dodge
+		False is under conditions where dodging is disabled
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool canDodge;
+
+	/*
+		Used to give player temporary Speed boosts/debuffs
+		multiplies directional input value.
+		Default value is 1.0
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MovementModifier;
 
 	/*
 		The amount of time, in seconds, since the last player input
@@ -195,5 +214,4 @@ protected:
 		NULL when you are not locked on
 	*/
 	class AJEnemy* lockTarget;
-
 };

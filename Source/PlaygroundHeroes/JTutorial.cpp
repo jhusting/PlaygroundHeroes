@@ -3,6 +3,7 @@
 #include "JTutorial.h"
 #include <EngineGlobals.h>
 #include <Runtime/Core/Public/Containers/Array.h>
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include <Runtime/Engine/Classes/Engine/Engine.h>
 
 
@@ -129,7 +130,6 @@ void AJTutorial::BeginPlay()
 		}
 	}
 	
-	
 }
 
 void AJTutorial::DisplayText() {
@@ -232,7 +232,19 @@ void AJTutorial::Tick(float DeltaTime)
 //	UE_LOG(LogTemp, Warning, TEXT("test %s"), archer->GetDodging());
 
 	Super::Tick(DeltaTime);
-	
+	if (!knight) {
+		UE_LOG(LogTemp, Error, TEXT("NO KNIGHT WAS FOUND"));
+		return;
+	}
+	if (!archer) { 
+		UE_LOG(LogTemp, Error, TEXT("NO ARCHER WAS FOUND"));
+		return; 
+	}
+	if (!DialogueHandler) {
+		UE_LOG(LogTemp, Error, TEXT("NO DIALOGUEHANDLER WAS FOUND"));
+		return;
+	}
+
 	switch (Step) {
 	case 0:
 		//DisplayText[text1, text2, text3] //intro text about world
