@@ -62,9 +62,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void AddHealth(float Change);
-
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();
