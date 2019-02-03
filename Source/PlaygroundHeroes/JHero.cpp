@@ -63,6 +63,7 @@ AJHero::AJHero()
 	bDodging = false;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
+	bCanBeDamaged = true;
 
 }
 
