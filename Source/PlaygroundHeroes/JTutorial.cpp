@@ -47,15 +47,15 @@ AJTutorial::AJTutorial()
 	lines2.Add("ABIGAIL: Bet you can't hit me with your sword!");
 	lines2.Add("LEILA: Oh yeah? We'll see about that!");
 
-	inputs1.Add("<Player 1: Hold the RT and push the Left Stick in a direction to Dodge>");
+	inputs1.Add("<Player 1: Hold a direction with the left stick and press B to Dodge>");
 	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
 
 	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
 	lines3.Add("LEILA: Now try to hit me with an arrow!");
 	lines3.Add("ABIGAIL: Ok, stand back!");
 
-	inputs2.Add("<Player 1: Right Stick to Lock On to a target. Hold RB to charge an arrow, release to Shoot>");
-	inputs2.Add("<Player 2: Hold the RT and push the Left Stick in a direction to Dodge>");
+	inputs2.Add("<Player 1: Right Stick to focus on a target. Hold RB to charge an arrow, release to Shoot>");
+	inputs2.Add("<Player 2: Hold a direction with the left stick and press B to Dodge>");
 
 	lines4.Add("ABIGAIL: Even though we haven't battled in ages, it's all coming back to me now.");
 	lines4.Add("ABIGAIL: Why don't you try blocking an arrow with your shield?");
@@ -314,7 +314,7 @@ void AJTutorial::Tick(float DeltaTime)
 			sendInputText(inputs3, inputDurations);
 
 			if (archer->GetInputAttack() || archer->GetAttacking()) ArcherDidInput = true;
-			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+			if (knight->GetBlocking()) KnightDidInput = true;
 
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();

@@ -16,6 +16,8 @@ class PLAYGROUNDHEROES_API AJKnight : public AJHero
 
 public:
 	AJKnight();
+
+	FORCEINLINE bool GetBlocking() const { return bBlocking; }
 	
 protected:
 	/*
