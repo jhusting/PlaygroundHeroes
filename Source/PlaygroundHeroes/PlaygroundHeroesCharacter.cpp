@@ -117,7 +117,7 @@ void APlaygroundHeroesCharacter::OnHit(AJEnemy* Enemy)
 	{
 		if (Enemy && !Enemy->IsPendingKill())
 		{
-			Enemy->AddHealth(-20.f);
+			Enemy->AddHealth(-20.f, "");
 		}
 	}
 }

@@ -47,6 +47,13 @@ public:
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
 
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
+	
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void AddHealth(float Change);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+		void TestFunction();
+
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -189,4 +196,9 @@ protected:
 	*/
 	class AJEnemy* lockTarget;
 
+	// The current hit type we are on
+	// Knight Move Names: KnightAttack1, KnightAttack2, KnightAttack3
+	// Archer Move Names: ArcherHit1
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	FString CurrentHitType;
 };
