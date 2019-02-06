@@ -52,7 +52,7 @@ void AJEnemy::SetHealth(float NewHealth)
 
 void AJEnemy::AddHealth(float Change, FString MoveName)
 {
-	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
+	Health = FMath::Clamp(Health + Change, 0.f, maxHealth);
 	AddHit(MoveName);
 }
 
