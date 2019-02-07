@@ -105,6 +105,7 @@ void AJArcher::MoveForward(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.X = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bDodging)
 	{
 		if (bAttacking)
@@ -124,6 +125,7 @@ void AJArcher::MoveRight(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.Y = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bDodging)
 	{
 		if (bAttacking)

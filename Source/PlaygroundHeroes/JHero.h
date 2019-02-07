@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	float LockCamRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool interacting;
+
 	FORCEINLINE bool GetAttacking() const { return bAttacking; }
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
@@ -88,6 +91,13 @@ protected:
 	UFUNCTION(Category = "Combat")
 	void Dodge();
 
+	UFUNCTION(Category = "Combat")
+	void InteractPressed();
+
+	UFUNCTION(Category = "Combat")
+	void InteractReleased();
+
+
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
 
@@ -112,6 +122,7 @@ protected:
 	// Handler for when the camera is to be locked
 	void LockCamera();
 
+	
 	// True when the camera is locked
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "JCamera")
 	bool bIsLocked;
@@ -142,6 +153,21 @@ protected:
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bDodging;
+
+	/*
+		True when player is in state they can dodge
+		False is under conditions where dodging is disabled
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool canDodge;
+
+	/*
+		Used to give player temporary Speed boosts/debuffs
+		multiplies directional input value.
+		Default value is 1.0
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MovementModifier;
 
 	/*
 		The amount of time, in seconds, since the last player input

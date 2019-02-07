@@ -51,6 +51,7 @@ void AJEnemy::SetHealth(float NewHealth)
 }
 
 void AJEnemy::AddHealth(float Change, FString MoveName)
+<<<<<<< HEAD
 {
 	Health = FMath::Clamp(Health + Change, 0.f, 100.f);
 	AddHit(MoveName);
@@ -71,5 +72,27 @@ void AJEnemy::AddHit(FString MoveName)
 
 bool AJEnemy::CheckHit(FString MoveName)
 {
+=======
+{
+	Health = FMath::Clamp(Health + Change, 0.f, maxHealth);
+	AddHit(MoveName);
+}
+
+void AJEnemy::AddHit(FString MoveName)
+{
+	if (!RecentlyHitBy.Contains(MoveName))
+	{
+		RecentlyHitBy.Add(MoveName);
+		RecentlyHitByTimes.Add(0.f);
+	}
+	else
+	{
+		UE_LOG(LogClass, Warning, TEXT("Warning: Trying to add a hit that is already an element of RecentlyHitBy"));
+	}
+}
+
+bool AJEnemy::CheckHit(FString MoveName)
+{
+>>>>>>> 80d4c3eb4d83e85b5e54f76453055659a69adbf1
 	return RecentlyHitBy.Contains(MoveName);
 }

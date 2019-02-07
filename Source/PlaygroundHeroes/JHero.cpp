@@ -12,6 +12,7 @@
 #include "EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Engine.h"
 
 // Sets default values
@@ -61,8 +62,11 @@ AJHero::AJHero()
 	bAttacking = false;
 	bInputtingDodge = false;
 	bDodging = false;
+	canDodge = true;
+	MovementModifier = 1.0f;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
+	bCanBeDamaged = true;
 
 }
 
@@ -115,6 +119,8 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("LockCam", IE_Pressed, this, &AJHero::LockCamera);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AJHero::Attack);
 	PlayerInputComponent->BindAction("Dodge", IE_Pressed, this, &AJHero::Dodge);
+	//PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AJHero::InteractPressed);
+	//PlayerInputComponent->BindAction("Interact", IE_Released, this, &AJHero::InteractReleased);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AJHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AJHero::MoveRight);
@@ -155,6 +161,7 @@ void AJHero::MoveForward(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.X = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
 		// find out which way is forward
@@ -172,6 +179,7 @@ void AJHero::MoveRight(float Value)
 {
 	// I know this is wrong but if I flip it it breaks so leave it
 	InputDirection.Y = Value;
+	Value *= MovementModifier;
 	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
 	{
 		// find out which way is right
@@ -230,8 +238,21 @@ void AJHero::Dodge()
 	{
 		bInputtingAttack = false;
 	}
+	if (canDodge) {
+		DodgeHelper();
+	}
+}
 
-	DodgeHelper();
+void AJHero::InteractPressed() {
+	interacting = true;
+	UE_LOG(LogClass, Warning, TEXT("yes"));
+
+}
+
+void AJHero::InteractReleased() {
+	interacting = false;
+	UE_LOG(LogClass, Warning, TEXT("no"));
+
 }
 
 bool AJHero::DodgeHelper()

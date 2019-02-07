@@ -40,38 +40,44 @@ public:
 
 	void DisplayText();
 
-	void sendInputText(TArray<FString> inputs, TArray<float> inputDuration);
+	void sendInputText(TArray<FString> inputs, TArray<int> fonts);
 	void postInput();
 
 	//Hold sequences of dialouge (switch after each input listener runs)
 	TArray<FString> lines0;
 	TArray<float> durations0;
+	TArray<int> fonts0;
 
 	TArray<FString> lines1;
 	TArray<float> durations1;
+	TArray<int> fonts1;
 
 	TArray<FString> lines2;
 	TArray<float> durations2;
+	TArray<int> fonts2;
 
 	TArray<FString> lines3;
 	TArray<float> durations3;
+	TArray<int> fonts3;
 
 	TArray<FString> lines4;
 	TArray<float> durations4;
+	TArray<int> fonts4;
 
 	TArray<FString> lines5;
 	TArray<float> durations5;
+	TArray<int> fonts5;
 
 	TArray<FString> lines6;
 	TArray<float> durations6;
+	TArray<int> fonts6;
 
 	TArray<FString> inputs0;
 	TArray<FString> inputs1;
 	TArray<FString> inputs2;
 	TArray<FString> inputs3;
 	TArray<FString> inputs4;
-	TArray<float> inputDurations;
-
+	TArray<int> inputFonts;
 
 protected:
 	// Called when the game starts or when spawned
