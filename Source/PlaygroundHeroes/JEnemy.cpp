@@ -27,7 +27,6 @@ void AJEnemy::UpdateHitTimes(float DeltaTime)
 	for (int32 i = 0; i < RecentlyHitByTimes.Num(); ++i)
 	{
 		RecentlyHitByTimes[i] += DeltaTime;
-		UE_LOG(LogClass, Warning, TEXT("Trying to update Array"));
 
 		if (RecentlyHitByTimes[i] >= HitTrackingTime)
 		{
