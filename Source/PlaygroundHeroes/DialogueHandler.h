@@ -28,11 +28,23 @@ public:
 		FString player2Text;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FString> dialogueLines;
-	//TArray<FText> dialogueLines;
+		int player1Font;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int player2Font;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int centerFont;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FString> dialogueLines;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<float> dialogueDurations;
+
+	//0 default, 1 Oldersister, 2 younger sister
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<int> fontTypes;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool dialogueFinished;
@@ -55,9 +67,11 @@ protected:
 	void setNewText();
 
 	float defaultDuration;
+	int defaultFont;
 	float timeSinceLastLineChange;
 	int lineNumber;
 	int maxLines;
+	bool lastSendWasInput;
 
 public:
 	// Called every frame
@@ -65,7 +79,13 @@ public:
 
 	//Send a new Sequence of dialogue lines to interate through
 	UFUNCTION(BlueprintCallable)
-		void sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations);
+		void sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations, TArray<int> fonts);
+
+	/*Send new input prompt text. Make TArrays 2 elements long.
+	 *index 0 appears for player 0, index 1 for player 1 
+	 */
+	UFUNCTION(BlueprintCallable)
+		void sendInputText(TArray<FString> inputs, TArray<int>fontType);
 
 	UFUNCTION(BlueprintCallable)
 		void updateDialogue(float DeltaTime);
