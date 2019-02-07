@@ -74,7 +74,7 @@ AJTutorial::AJTutorial()
 	lines2.Add("LEILA: Oh yeah? We'll see about that!");
 	fonts2.Add(1);
 
-	inputs1.Add("<Player 1: Hold the RT and push the Left Stick in a direction to Dodge>");
+	inputs1.Add("<Player 1: Hold a direction with the left stick and press B to Dodge>");
 	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
 
 	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
@@ -84,8 +84,8 @@ AJTutorial::AJTutorial()
 	lines3.Add("ABIGAIL: Ok, stand back!");
 	fonts3.Add(2);
 
-	inputs2.Add("<Player 1: Right Stick to Lock On to a target. Hold RB to charge an arrow, release to Shoot>");
-	inputs2.Add("<Player 2: Hold the RT and push the Left Stick in a direction to Dodge>");
+	inputs2.Add("<Player 1: Right Stick to focus on a target. Hold RB to charge an arrow, release to Shoot>");
+	inputs2.Add("<Player 2: Hold a direction with the left stick and press B to Dodge>");
 
 	lines4.Add("ABIGAIL: Even though we haven't battled in ages, it's all coming back to me now.");
 	fonts4.Add(2);
@@ -368,7 +368,7 @@ void AJTutorial::Tick(float DeltaTime)
 			sendInputText(inputs3, inputFonts);
 
 			if (archer->GetInputAttack() || archer->GetAttacking()) ArcherDidInput = true;
-			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+			if (knight->GetBlocking()) KnightDidInput = true;
 
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();

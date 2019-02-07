@@ -12,6 +12,7 @@
 #include "EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Engine.h"
 
 // Sets default values
@@ -118,6 +119,8 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("LockCam", IE_Pressed, this, &AJHero::LockCamera);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AJHero::Attack);
 	PlayerInputComponent->BindAction("Dodge", IE_Pressed, this, &AJHero::Dodge);
+	//PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AJHero::InteractPressed);
+	//PlayerInputComponent->BindAction("Interact", IE_Released, this, &AJHero::InteractReleased);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AJHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AJHero::MoveRight);
@@ -238,6 +241,18 @@ void AJHero::Dodge()
 	if (canDodge) {
 		DodgeHelper();
 	}
+}
+
+void AJHero::InteractPressed() {
+	interacting = true;
+	UE_LOG(LogClass, Warning, TEXT("yes"));
+
+}
+
+void AJHero::InteractReleased() {
+	interacting = false;
+	UE_LOG(LogClass, Warning, TEXT("no"));
+
 }
 
 bool AJHero::DodgeHelper()
