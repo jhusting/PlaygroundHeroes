@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	float LockCamRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool interacting;
+
 	FORCEINLINE bool GetAttacking() const { return bAttacking; }
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
@@ -87,6 +90,13 @@ protected:
 
 	UFUNCTION(Category = "Combat")
 	void Dodge();
+
+	UFUNCTION(Category = "Combat")
+	void InteractPressed();
+
+	UFUNCTION(Category = "Combat")
+	void InteractReleased();
+
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
