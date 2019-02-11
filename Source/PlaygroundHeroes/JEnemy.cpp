@@ -68,9 +68,42 @@ void AJEnemy::AddHealth(float Change, FString MoveName)
 		{
 			float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
 			if (currDamage) //If the value has been initialized
-				*currDamage = Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+				*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
 		}
-		DamageText->AddToViewport();
+
+		Property = DamageText->GetClass()->FindPropertyByName("HitActor");
+		if (Property)
+		{
+			AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
+			*hitActor = this;
+		}
+
+		DamageText->AddToPlayerScreen();
+	}
+
+	pItr++;
+
+	DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
+	DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
+
+	if (DamageText)
+	{
+		UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
+		if (Property) // If we successfully found that property
+		{
+			float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
+			if (currDamage) //If the value has been initialized
+				*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+		}
+
+		Property = DamageText->GetClass()->FindPropertyByName("HitActor");
+		if (Property)
+		{
+			AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
+			*hitActor = this;
+		}
+
+		DamageText->AddToPlayerScreen();
 	}
 
 	Health = FMath::Clamp(Health + Change, 0.f, maxHealth);
