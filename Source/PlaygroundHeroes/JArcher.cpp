@@ -16,11 +16,11 @@
 
 AJArcher::AJArcher()
 {
-	static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/Warriors/ArrowBP"));
+	/*static ConstructorHelpers::FClassFinder<AActor> ArrowBPClass(TEXT("/Game/Blueprints/Warriors/ArrowBP"));
 	if (ArrowBPClass.Class != NULL)
 	{
 		ArrowBP = ArrowBPClass.Class;
-	}
+	}*/
 
 	MaxHealth = 100;
 	Health = MaxHealth;

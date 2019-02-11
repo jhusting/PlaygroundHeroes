@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "JEnemy.h"
-
+#include "Blueprint/UserWidget.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 
 // Sets default values
 AJEnemy::AJEnemy()
@@ -51,6 +52,27 @@ void AJEnemy::SetHealth(float NewHealth)
 
 void AJEnemy::AddHealth(float Change, FString MoveName)
 {
+	FActorSpawnParameters SpawnParams;
+
+	UWorld* const World = GetWorld();
+	FConstPlayerControllerIterator pItr = World->GetPlayerControllerIterator();
+
+	// Spawn Player 1 Damage Text
+	UUserWidget* DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
+	DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
+
+	if (DamageText)
+	{
+		UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
+		if (Property) // If we successfully found that property
+		{
+			float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
+			if (currDamage) //If the value has been initialized
+				*currDamage = Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+		}
+		DamageText->AddToViewport();
+	}
+
 	Health = FMath::Clamp(Health + Change, 0.f, maxHealth);
 	AddHit(MoveName);
 }
