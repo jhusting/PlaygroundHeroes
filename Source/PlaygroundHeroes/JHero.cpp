@@ -382,7 +382,12 @@ void AJHero::Die() {
 		SpawnParams.Instigator = this;
 		SpawnParams.Owner = this;
 		AActor* lfAlert = World->SpawnActor<AActor>(LifeAlert, GetActorLocation(), GetActorRotation(), SpawnParams);
+
+		if (lfAlert) {
+			mLifeAlert = lfAlert;
+		}
 	}
+	
 	bHasFallen = true;
 	MovementModifier = 0.f;
 }
@@ -391,4 +396,5 @@ void AJHero::Revive() {
 	bHasFallen = false;
 	MovementModifier = 1.0f;
 	Health = MaxHealth;
+	mLifeAlert->Destroy();
 }
