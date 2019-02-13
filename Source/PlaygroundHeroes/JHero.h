@@ -10,6 +10,9 @@ UCLASS()
 class PLAYGROUNDHEROES_API AJHero : public ACharacter
 {
 	GENERATED_BODY()
+	
+	TSubclassOf<class AActor> LifeAlert;
+	AActor* mLifeAlert = nullptr;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -48,6 +51,8 @@ public:
 	FORCEINLINE FVector GetInputDirection() const {return InputDirection;}
 
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
+
+	FORCEINLINE bool GetHasFallen() { return bHasFallen; }
 
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
 	
@@ -101,6 +106,11 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Die();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Revive();
 	/**
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -159,7 +169,13 @@ protected:
 		False is under conditions where dodging is disabled
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	bool canDodge;
+	bool bCanDodge;
+	
+	/*
+		Determines if player has fallen and can't get up
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bHasFallen;
 
 	/*
 		Used to give player temporary Speed boosts/debuffs
