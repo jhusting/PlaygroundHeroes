@@ -75,6 +75,13 @@ void AJArcher::Tick(float DeltaTime)
 		else
 			Stamina = FMath::Clamp(Stamina + (StaminaGen/4) * DeltaTime, -50.f, 100.f);
 	}
+
+	if (!bHasFallen) {
+		if (Health <= 0.f) {
+			Die();
+		}
+	}
+
 }
 
 // Called to bind functionality to input

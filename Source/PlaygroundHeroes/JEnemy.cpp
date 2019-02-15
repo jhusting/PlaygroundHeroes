@@ -71,6 +71,7 @@ void AJEnemy::AddHealth(float Change, FString MoveName)
 				*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
 		}
 
+	
 		Property = DamageText->GetClass()->FindPropertyByName("HitActor");
 		if (Property)
 		{

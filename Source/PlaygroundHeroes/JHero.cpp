@@ -51,6 +51,12 @@ AJHero::AJHero()
 
 	InputDirection = FVector(0.f, 0.f, 0.f);
 
+	//Get reference to Life alert to handle 'death'
+	static ConstructorHelpers::FClassFinder<AActor> LifeAlertClass(TEXT("/Game/Blueprints/Generic/LifeAlert"));
+	if (LifeAlertClass.Class != NULL) {
+		LifeAlert = LifeAlertClass.Class;
+	}
+
 	Health = 100.f;
 	Stamina = 100.f;
 	AttackCost = 30.f;
@@ -62,7 +68,7 @@ AJHero::AJHero()
 	bAttacking = false;
 	bInputtingDodge = false;
 	bDodging = false;
-	canDodge = true;
+	bCanDodge = true;
 	MovementModifier = 1.0f;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
@@ -107,6 +113,12 @@ void AJHero::Tick(float DeltaTime)
 		else
 			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, 100.f);
 	}
+
+	if (!bHasFallen) {
+		if (Health <= 0.f) {
+			Die();
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -146,66 +158,73 @@ void AJHero::TestFunction() {
 void AJHero::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
-	if (!bIsLocked)
+	if (!bIsLocked && !bHasFallen)
 		AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AJHero::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
-	if (!bIsLocked)
+	if (!bIsLocked && !bHasFallen)
 		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
 void AJHero::MoveForward(float Value)
 {
-	// I know this is wrong but if I flip it it breaks so leave it
-	InputDirection.X = Value;
-	Value *= MovementModifier;
-	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	if (!bHasFallen) {
+		// I know this is wrong but if I flip it it breaks so leave it
+		InputDirection.X = Value;
+		Value *= MovementModifier;
+		if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
+		{
+			// find out which way is forward
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-		//GetCharacterMovement()->AddForce(Direction*Value);
+			// get forward vector
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+			AddMovementInput(Direction, Value);
+			//GetCharacterMovement()->AddForce(Direction*Value);
+		}
 	}
+
 }
 
 void AJHero::MoveRight(float Value)
 {
-	// I know this is wrong but if I flip it it breaks so leave it
-	InputDirection.Y = Value;
-	Value *= MovementModifier;
-	if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
-	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+	if (!bHasFallen) {
+		// I know this is wrong but if I flip it it breaks so leave it
+		InputDirection.Y = Value;
+		Value *= MovementModifier;
+		if ((Controller != NULL) && (Value != 0.0f) && !bAttacking && !bDodging)
+		{
+			// find out which way is right
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, Value);
-		//GetCharacterMovement()->AddForce(Direction*Value);
+			// get right vector 
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+			// add movement in that direction
+			AddMovementInput(Direction, Value);
+			//GetCharacterMovement()->AddForce(Direction*Value);
+		}
 	}
 }
 
 void AJHero::Attack()
 {
-	bInputtingAttack = true;
-	TimeSinceLastInput = 0.f;
+	if (!bHasFallen) {
+		bInputtingAttack = true;
+		TimeSinceLastInput = 0.f;
 
-	if (bInputtingDodge)
-	{
-		bInputtingDodge = false;
+		if (bInputtingDodge)
+		{
+			bInputtingDodge = false;
+		}
+
+		if (!bAttacking)
+			AttackHelper();
 	}
-
-	if(!bAttacking)
-		AttackHelper();
 }
 
 bool AJHero::AttackHelper()
@@ -231,15 +250,17 @@ bool AJHero::AttackHelper()
 
 void AJHero::Dodge()
 {
-	bInputtingDodge = true;
-	TimeSinceLastInput = 0.f;
+	if (!bHasFallen) {
+		bInputtingDodge = true;
+		TimeSinceLastInput = 0.f;
 
-	if (bInputtingAttack)
-	{
-		bInputtingAttack = false;
-	}
-	if (canDodge) {
-		DodgeHelper();
+		if (bInputtingAttack)
+		{
+			bInputtingAttack = false;
+		}
+		if (bCanDodge) {
+			DodgeHelper();
+		}
 	}
 }
 
@@ -350,4 +371,30 @@ void AJHero::LockCameraHelper()
 	PlayerRotation.Yaw = Rotation.Yaw;
 
 	SetActorRotation(PlayerRotation);
+}
+
+void AJHero::Die() {
+	UE_LOG(LogTemp, Warning, TEXT("Running Die!"));
+	UWorld* const World = GetWorld();
+	if (World) {
+		UE_LOG(LogTemp, Warning, TEXT("Should be spawning lifeAlert"));
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Instigator = this;
+		SpawnParams.Owner = this;
+		AActor* lfAlert = World->SpawnActor<AActor>(LifeAlert, GetActorLocation(), GetActorRotation(), SpawnParams);
+
+		if (lfAlert) {
+			mLifeAlert = lfAlert;
+		}
+	}
+	
+	bHasFallen = true;
+	MovementModifier = 0.f;
+}
+
+void AJHero::Revive() {
+	bHasFallen = false;
+	MovementModifier = 1.0f;
+	Health = MaxHealth;
+	mLifeAlert->Destroy();
 }

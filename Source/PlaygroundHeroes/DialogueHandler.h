@@ -108,4 +108,7 @@ public:
 	//determines whether displays center text or different text for each player
 	UFUNCTION(BlueprintCallable)
 		void toggleSplitMode(bool enabled);
+
+	UFUNCTION(BlueprintCallable)
+		void clear();
 };
