@@ -28,6 +28,8 @@ public:
 		TArray<FString> RecentlyHitBy;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		TArray<float> RecentlyHitByTimes;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
+		TSubclassOf<class UUserWidget> DamageWidgetBPClass;
 
 protected:
 	// Called when the game starts or when spawned

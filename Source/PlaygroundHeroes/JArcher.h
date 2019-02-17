@@ -14,8 +14,6 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 {
 	GENERATED_BODY()
 
-	TSubclassOf<class AActor> ArrowBP;
-
 	void ReleaseAttack();
 
 	virtual void Tick(float DeltaTime) override;
@@ -24,6 +22,9 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 	float timeHeld = -1.f;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
+	TSubclassOf<class AActor> ArrowBP;
+
 	AJArcher();
 	
 protected:
