@@ -104,6 +104,9 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 		renderWidget = false;
 		paused = true;
 		dialogueFinished = true;
+		centerText = " ";
+		player1Text = " ";
+		player2Text = " ";
 	}
 }
 
@@ -175,7 +178,16 @@ void ADialogueHandler::toggleSplitMode(bool enabled) {
 	splitMode = enabled;
 }
 
+void ADialogueHandler::clear() {
+	centerText = " ";
+	player1Text = " ";
+	player2Text = " ";
+	renderWidget = false;
+	paused = true;
+}
+
 void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
+	lastSendWasInput = false;
 	toggleSplitMode(true);
 	TArray<float> dummyDurations;
 	sendNewdialogueSequence(inputs, dummyDurations, fonts);
