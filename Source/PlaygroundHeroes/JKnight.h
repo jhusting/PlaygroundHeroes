@@ -18,6 +18,8 @@ public:
 	AJKnight();
 
 	FORCEINLINE bool GetBlocking() const { return bBlocking; }
+
+	virtual void AddHealth(float Change);
 	
 protected:
 	/*
