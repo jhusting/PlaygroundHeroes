@@ -11,6 +11,12 @@ AJKnight::AJKnight()
 	bBlocking = false;
 }
 
+void AJKnight::AddHealth(float Change)
+{
+	if (!(bDodging || bBlocking))
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+}
+
 // Called to bind functionality to input
 void AJKnight::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

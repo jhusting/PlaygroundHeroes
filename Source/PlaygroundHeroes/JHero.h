@@ -57,7 +57,7 @@ public:
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-		void AddHealth(float Change);
+	virtual void AddHealth(float Change);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 		void TestFunction();

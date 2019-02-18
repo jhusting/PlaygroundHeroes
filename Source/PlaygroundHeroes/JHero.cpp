@@ -148,7 +148,8 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AJHero::AddHealth(float Change)
 {
-	Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+	if (!bDodging)
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
 }
 
 void AJHero::TestFunction() {
