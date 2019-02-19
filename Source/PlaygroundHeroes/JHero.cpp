@@ -104,7 +104,7 @@ void AJHero::Tick(float DeltaTime)
 	if (bDodging)
 	{
 		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
-		SetActorLocation(NewLocation, true);
+		//SetActorLocation(NewLocation, true);
 	}
 	else
 	{
@@ -237,12 +237,12 @@ bool AJHero::AttackHelper()
 		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = true;
 
-		const FRotator Rotation = Controller->GetControlRotation();
+		/*const FRotator Rotation = Controller->GetControlRotation();
 		FRotator PlayerRotation = GetActorRotation();
 
 		PlayerRotation.Yaw = Rotation.Yaw;
 
-		SetActorRotation(PlayerRotation);
+		SetActorRotation(PlayerRotation);*/
 		return true;
 	}
 
@@ -369,7 +369,8 @@ void AJHero::LockCameraHelper()
 	const FRotator Rotation = Controller->GetControlRotation();
 	FRotator PlayerRotation = GetActorRotation();
 
-	PlayerRotation.Yaw = Rotation.Yaw;
+	if (!bDodging)
+		PlayerRotation.Yaw = Rotation.Yaw;
 
 	SetActorRotation(PlayerRotation);
 }
