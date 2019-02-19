@@ -54,8 +54,11 @@ void AJKnight::Attack()
 			bInputtingDodge = false;
 		}
 
-		if (!bAttacking && !bBlocking && !bDodging)
+		if (!bAttacking && !bDodging)
+		{
+			bBlocking = false;
 			AttackHelper();
+		}
 	}
 }
 
