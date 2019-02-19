@@ -221,7 +221,10 @@ void AJArcher::ReleaseAttack()
 
 			// Now we try to look at the hit, and rotate the arrow to point towards it
 			FRotator lookAt = UKismetMathLibrary::FindLookAtRotation(mArrow->GetActorLocation(), RV_Hit.ImpactPoint);
-			mArrow->SetActorRotation(lookAt);
+			if (RV_Hit.bBlockingHit)
+				mArrow->SetActorRotation(lookAt);
+			else
+				mArrow->SetActorRotation(GetControlRotation());
 
 			// This is the ratio of how long we've held the button. Time Held / Total time needed to hold to get to max strength
 			float heldRatio = FMath::Clamp(timeHeld / HoldTimeNeeded, 0.f, 1.f);

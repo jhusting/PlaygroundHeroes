@@ -104,7 +104,7 @@ void AJHero::Tick(float DeltaTime)
 	if (bDodging)
 	{
 		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
-		SetActorLocation(NewLocation, true);
+		//SetActorLocation(NewLocation, true);
 	}
 	else
 	{
@@ -214,7 +214,8 @@ void AJHero::MoveRight(float Value)
 
 void AJHero::Attack()
 {
-	if (!bHasFallen) {
+	if (!bHasFallen) 
+	{
 		bInputtingAttack = true;
 		TimeSinceLastInput = 0.f;
 
@@ -237,12 +238,12 @@ bool AJHero::AttackHelper()
 		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = true;
 
-		const FRotator Rotation = Controller->GetControlRotation();
+		/*const FRotator Rotation = Controller->GetControlRotation();
 		FRotator PlayerRotation = GetActorRotation();
 
 		PlayerRotation.Yaw = Rotation.Yaw;
 
-		SetActorRotation(PlayerRotation);
+		SetActorRotation(PlayerRotation);*/
 		return true;
 	}
 
@@ -279,7 +280,7 @@ void AJHero::InteractReleased() {
 
 bool AJHero::DodgeHelper()
 {
-	if (!bAttacking && Stamina >= 0.f)
+	if (!bDodging && !bAttacking && Stamina >= 0.f)
 	{
 		bInputtingDodge = false;
 		TimeSinceLastInput = -1.f;
@@ -369,7 +370,8 @@ void AJHero::LockCameraHelper()
 	const FRotator Rotation = Controller->GetControlRotation();
 	FRotator PlayerRotation = GetActorRotation();
 
-	PlayerRotation.Yaw = Rotation.Yaw;
+	if (!bDodging)
+		PlayerRotation.Yaw = Rotation.Yaw;
 
 	SetActorRotation(PlayerRotation);
 }
