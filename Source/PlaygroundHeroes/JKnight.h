@@ -38,6 +38,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
+	virtual void Attack();
 	void Block();
 	void BlockReleased();
 };

@@ -214,7 +214,8 @@ void AJHero::MoveRight(float Value)
 
 void AJHero::Attack()
 {
-	if (!bHasFallen) {
+	if (!bHasFallen) 
+	{
 		bInputtingAttack = true;
 		TimeSinceLastInput = 0.f;
 
@@ -279,7 +280,7 @@ void AJHero::InteractReleased() {
 
 bool AJHero::DodgeHelper()
 {
-	if (!bAttacking && Stamina >= 0.f)
+	if (!bDodging && !bAttacking && Stamina >= 0.f)
 	{
 		bInputtingDodge = false;
 		TimeSinceLastInput = -1.f;

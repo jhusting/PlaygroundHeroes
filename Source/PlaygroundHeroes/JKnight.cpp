@@ -42,6 +42,23 @@ void AJKnight::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AJKnight::LookUpAtRate);
 }
 
+void AJKnight::Attack()
+{
+	if (!bHasFallen) 
+	{
+		bInputtingAttack = true;
+		TimeSinceLastInput = 0.f;
+
+		if (bInputtingDodge)
+		{
+			bInputtingDodge = false;
+		}
+
+		if (!bAttacking && !bBlocking && !bDodging)
+			AttackHelper();
+	}
+}
+
 void AJKnight::Block()
 {
 	if(!bDodging && !bAttacking)
