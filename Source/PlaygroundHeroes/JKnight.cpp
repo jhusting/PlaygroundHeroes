@@ -63,7 +63,7 @@ void AJKnight::Attack()
 }
 void AJKnight::Dodge()
 {
-	if (!bHasFallen) 
+	if (!bHasFallen && !bAttacking) 
 	{
 		bInputtingDodge = true;
 		TimeSinceLastInput = 0.f;
