@@ -260,7 +260,7 @@ void AJHero::Dodge()
 		{
 			bInputtingAttack = false;
 		}
-		if (bCanDodge) {
+		if (!bDodging && bCanDodge) {
 			DodgeHelper();
 		}
 	}
