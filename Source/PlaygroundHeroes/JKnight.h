@@ -41,4 +41,5 @@ protected:
 	virtual void Attack();
 	void Block();
 	void BlockReleased();
+	void Dodge();
 };

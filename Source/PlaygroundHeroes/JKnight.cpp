@@ -61,6 +61,24 @@ void AJKnight::Attack()
 		}
 	}
 }
+void AJKnight::Dodge()
+{
+	if (!bHasFallen) 
+	{
+		bInputtingDodge = true;
+		TimeSinceLastInput = 0.f;
+
+		if (bInputtingAttack)
+		{
+			bInputtingAttack = false;
+		}
+		if (!bDodging && bCanDodge) 
+		{
+			bBlocking = false;
+			DodgeHelper();
+		}
+	}
+}
 
 void AJKnight::Block()
 {

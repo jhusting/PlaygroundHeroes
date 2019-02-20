@@ -53,7 +53,8 @@ AJHero::AJHero()
 
 	//Get reference to Life alert to handle 'death'
 	static ConstructorHelpers::FClassFinder<AActor> LifeAlertClass(TEXT("/Game/Blueprints/Generic/LifeAlert"));
-	if (LifeAlertClass.Class != NULL) {
+	if (LifeAlertClass.Class != NULL) 
+	{
 		LifeAlert = LifeAlertClass.Class;
 	}
 
@@ -70,6 +71,7 @@ AJHero::AJHero()
 	bDodging = false;
 	bCanDodge = true;
 	MovementModifier = 1.0f;
+	deathMovementModifier = 0.01f;
 	TimeSinceLastInput = -1.f;
 	InputQueueTime = .3f;
 	bCanBeDamaged = true;
@@ -114,8 +116,10 @@ void AJHero::Tick(float DeltaTime)
 			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, 100.f);
 	}
 
-	if (!bHasFallen) {
-		if (Health <= 0.f) {
+	if (!bHasFallen) 
+	{
+		if (Health <= 0.f) 
+		{
 			Die();
 		}
 	}
@@ -152,7 +156,8 @@ void AJHero::AddHealth(float Change)
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
 }
 
-void AJHero::TestFunction() {
+void AJHero::TestFunction() 
+{
 	UE_LOG(LogClass, Warning, TEXT("Test Function"));
 }
 
@@ -172,7 +177,8 @@ void AJHero::LookUpAtRate(float Rate)
 
 void AJHero::MoveForward(float Value)
 {
-	if (!bHasFallen) {
+	if (!bHasFallen) 
+	{
 		// I know this is wrong but if I flip it it breaks so leave it
 		InputDirection.X = Value;
 		Value *= MovementModifier;
@@ -193,7 +199,8 @@ void AJHero::MoveForward(float Value)
 
 void AJHero::MoveRight(float Value)
 {
-	if (!bHasFallen) {
+	if (!bHasFallen) 
+	{
 		// I know this is wrong but if I flip it it breaks so leave it
 		InputDirection.Y = Value;
 		Value *= MovementModifier;
@@ -252,7 +259,8 @@ bool AJHero::AttackHelper()
 
 void AJHero::Dodge()
 {
-	if (!bHasFallen) {
+	if (!bHasFallen) 
+	{
 		bInputtingDodge = true;
 		TimeSinceLastInput = 0.f;
 
@@ -260,19 +268,22 @@ void AJHero::Dodge()
 		{
 			bInputtingAttack = false;
 		}
-		if (!bDodging && bCanDodge) {
+		if (!bDodging && bCanDodge) 
+		{
 			DodgeHelper();
 		}
 	}
 }
 
-void AJHero::InteractPressed() {
+void AJHero::InteractPressed()
+{
 	interacting = true;
 	UE_LOG(LogClass, Warning, TEXT("yes"));
 
 }
 
-void AJHero::InteractReleased() {
+void AJHero::InteractReleased() 
+{
 	interacting = false;
 	UE_LOG(LogClass, Warning, TEXT("no"));
 
@@ -376,26 +387,30 @@ void AJHero::LockCameraHelper()
 	SetActorRotation(PlayerRotation);
 }
 
-void AJHero::Die() {
+void AJHero::Die() 
+{
 	UE_LOG(LogTemp, Warning, TEXT("Running Die!"));
 	UWorld* const World = GetWorld();
-	if (World) {
+	if (World) 
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Should be spawning lifeAlert"));
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Instigator = this;
 		SpawnParams.Owner = this;
 		AActor* lfAlert = World->SpawnActor<AActor>(LifeAlert, GetActorLocation(), GetActorRotation(), SpawnParams);
 
-		if (lfAlert) {
+		if (lfAlert) 
+		{
 			mLifeAlert = lfAlert;
 		}
 	}
 	
 	bHasFallen = true;
-	MovementModifier = 0.f;
+	MovementModifier = deathMovementModifier;
 }
 
-void AJHero::Revive() {
+void AJHero::Revive()
+{
 	bHasFallen = false;
 	MovementModifier = 1.0f;
 	Health = MaxHealth;

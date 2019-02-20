@@ -170,8 +170,13 @@ void AJArcher::LockCameraHelper()
 
 void AJArcher::Attack()
 {
-	if (Stamina > 0.f)
+	if (Stamina > 0.f && !bHasFallen && !bDodging)
 	{
+		if (bInputtingDodge) 
+		{
+			bInputtingDodge = false;
+		}
+
 		bAttacking = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		timeHeld = 0.f;

@@ -185,6 +185,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float MovementModifier;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float deathMovementModifier;
+
 	/*
 		The amount of time, in seconds, since the last player input
 		-1 when there has been no input in the last InputQueueTime seconds
