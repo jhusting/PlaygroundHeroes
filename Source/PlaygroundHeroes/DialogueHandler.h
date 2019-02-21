@@ -73,6 +73,14 @@ protected:
 	int maxLines;
 	bool lastSendWasInput;
 
+	TArray<FString> savedLines;
+	TArray<float> savedDurations;
+	TArray<int> savedFonts;
+	int savedLineNumber;
+	int savedMaxLines;
+	bool savedSplitMode;
+	bool savedWasInput;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -89,6 +97,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void updateDialogue(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+		void saveDialogue();
+
+	UFUNCTION(BlueprintCallable)
+		void loadSavedDialogue();
 
 	UFUNCTION(BlueprintCallable)
 		void pause();
