@@ -151,14 +151,16 @@ void AJTutorial::DisplayText() {
 	case 0:
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines0, durations0, fonts0);
-			dialogueSent = true;			
+			dialogueSent = true;
+			inputReady = false;
 		}
 		break;
 
 	case 1:
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines1, durations1, fonts1);
-			dialogueSent = true;			
+			dialogueSent = true;
+			inputReady = false;
 		}
 		break;
 
@@ -166,7 +168,7 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines2, durations2, fonts2);
 			dialogueSent = true;
-			
+			inputReady = false;
 		}
 		break;
 
@@ -174,7 +176,7 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {	
 			DialogueHandler->sendNewdialogueSequence(lines3, durations3, fonts3);
 			dialogueSent = true;
-			
+			inputReady = false;
 		}
 		break;
 
@@ -182,6 +184,7 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines4, durations4, fonts4);
 			dialogueSent = true;
+			inputReady = false;
 		}
 		break;
 
@@ -189,6 +192,7 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines5, durations5, fonts5);
 			dialogueSent = true;
+			inputReady = false;
 		}
 		break;
 
@@ -196,6 +200,7 @@ void AJTutorial::DisplayText() {
 		if (!dialogueSent) {
 			DialogueHandler->sendNewdialogueSequence(lines6, durations6, fonts6);
 			dialogueSent = true;
+			inputReady = false;
 		}
 		break;
 
@@ -270,10 +275,11 @@ void AJTutorial::Tick(float DeltaTime)
 	case 1: //Any Movement
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
-
+			inputReady = true;
 			//send input instruction text
 			sendInputText(inputs0, inputFonts);
-
+		}
+		if(inputReady){
 			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0) ArcherDidInput = true;
 			if (knight->GetInputDirection().X != 0 || knight->GetInputDirection().Y != 0) KnightDidInput = true;
 
@@ -287,9 +293,12 @@ void AJTutorial::Tick(float DeltaTime)
 	case 2: //knight right stick and RB
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
-
+			inputReady = true;
 			//send input instruction text
 			sendInputText(inputs1, inputFonts);
+		}
+
+		if(inputReady){
 			if (knight->GetIsLocked() && (knight->GetInputAttack() || knight->GetAttacking())) KnightDidInput = true;
 			if ((archer->GetInputDodge() || archer->GetDodging())) ArcherDidInput = true;
 
@@ -303,10 +312,12 @@ void AJTutorial::Tick(float DeltaTime)
 	case 3:
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
-
+			inputReady = true;
 			//send input instruction text
 			sendInputText(inputs2, inputFonts);
+		}
 
+		if(inputReady){
 			if (archer->GetIsLocked() && (archer->GetInputAttack() || archer->GetAttacking())) ArcherDidInput = true;
 			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
 
@@ -321,10 +332,12 @@ void AJTutorial::Tick(float DeltaTime)
 	case 4:
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
-
+			inputReady = true;
 			//send input instruction text
 			sendInputText(inputs3, inputFonts);
+		}
 
+		if (inputReady) {
 			if (archer->GetInputAttack() || archer->GetAttacking()) ArcherDidInput = true;
 			if (knight->GetBlocking()) KnightDidInput = true;
 
@@ -341,8 +354,11 @@ void AJTutorial::Tick(float DeltaTime)
 		//When text is done, move onwards
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
+			inputReady = true;
 			sendInputText(inputs4, inputFonts);
+		}
 
+		if (inputReady) {
 			if (archer->GetInputAttack() || archer->GetAttacking() || archer->GetInputDodge() || archer->GetDodging()) ArcherDidInput = true;
 			if (knight->GetInputAttack() || knight->GetAttacking() || knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
 			if (KnightDidInput && ArcherDidInput) {

@@ -76,6 +76,15 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	setNewText();
 }
 
+void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
+	lastSendWasInput = false;
+	toggleSplitMode(true);
+	TArray<float> dummyDurations;
+	sendNewdialogueSequence(inputs, dummyDurations, fonts);
+	pause();
+	dialogueFinished = false;
+	lastSendWasInput = true;
+}
 
 void ADialogueHandler::updateDialogue(float DeltaTime) {
 	if (paused) return; //Keep updateDialogue from running if paused.
@@ -153,6 +162,54 @@ void ADialogueHandler::setNewText() {
 	timeSinceLastLineChange = 0.0f;
 }
 
+void ADialogueHandler::saveDialogue() {
+	savedLines.Empty();
+	savedDurations.Empty();
+	savedFonts.Empty();
+
+	savedLines.Append(dialogueLines);
+	savedDurations.Append(dialogueDurations);
+	savedFonts.Append(fontTypes);
+
+	savedMaxLines = maxLines;
+	savedSplitMode = splitMode;
+	savedWasInput = lastSendWasInput;
+	if (savedWasInput) {
+		savedLineNumber = 0;
+	}
+	else {
+		savedLineNumber = lineNumber;
+	}
+}
+
+void ADialogueHandler::loadSavedDialogue() {
+	dialogueLines.Empty();
+	dialogueDurations.Empty();
+	fontTypes.Empty();
+
+	dialogueLines.Append(savedLines);
+	dialogueDurations.Append(savedDurations);
+	fontTypes.Append(savedFonts);
+
+	lineNumber = savedLineNumber;
+	maxLines = savedMaxLines;
+	splitMode = savedSplitMode;
+
+	dialogueFinished = false;
+	renderWidget = true;
+
+	if (savedWasInput) {
+		paused = true;
+		lastSendWasInput = true;
+	}
+	else {
+		paused = false;
+		lastSendWasInput = false;
+	}
+
+	setNewText();
+}
+
 void ADialogueHandler::pause() {
 	paused = true;
 }
@@ -183,15 +240,6 @@ void ADialogueHandler::clear() {
 	player1Text = " ";
 	player2Text = " ";
 	renderWidget = false;
-	paused = true;
-}
-
-void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
-	lastSendWasInput = false;
-	toggleSplitMode(true);
-	TArray<float> dummyDurations;
-	sendNewdialogueSequence(inputs, dummyDurations, fonts);
-	pause();
 	dialogueFinished = true;
-	lastSendWasInput = true;
+	paused = true;
 }
