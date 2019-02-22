@@ -219,6 +219,12 @@ void AJHero::MoveRight(float Value)
 	}
 }
 
+void AJHero::ResetInputBools()
+{
+	bAttacking = false;
+	bDodging = false;
+}
+
 void AJHero::Attack()
 {
 	if (!bHasFallen) 

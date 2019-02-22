@@ -250,15 +250,17 @@ void AJArcher::ReleaseAttack()
 				proj->bSimulationEnabled = true;
 
 				mArrow = nullptr;
+				Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 			}
 			else 
 			{
-				mArrow->Destroy();
-				mArrow = nullptr;
+				if (mArrow)
+				{
+					mArrow->Destroy();
+					mArrow = nullptr;
+				}
 			}
 		}
-
-		Stamina = FMath::Clamp(Stamina - AttackCost, -50.f, 100.f);
 		bAttacking = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}

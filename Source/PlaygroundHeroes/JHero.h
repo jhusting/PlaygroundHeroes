@@ -87,6 +87,9 @@ protected:
 	/** Called for side to side input */
 	virtual void MoveRight(float Value);
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void ResetInputBools();
+
 	UFUNCTION(Category = "Combat")
 	virtual void Attack();
 
