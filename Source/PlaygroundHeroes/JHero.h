@@ -105,7 +105,6 @@ protected:
 	UFUNCTION(Category = "Combat")
 	void InteractReleased();
 
-
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
 
@@ -114,6 +113,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Revive();
+
+	UFUNCTION(BlueprintCallable, Category = "Playground")
+	void OrientToControlRot();
 	/**
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate

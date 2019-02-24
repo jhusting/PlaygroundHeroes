@@ -55,12 +55,7 @@ void AJArcher::Tick(float DeltaTime)
 
 	if (bAttacking)
 	{
-		const FRotator Rotation = Controller->GetControlRotation();
-		FRotator PlayerRotation = GetActorRotation();
-
-		PlayerRotation.Yaw = Rotation.Yaw;
-
-		SetActorRotation(PlayerRotation);
+		OrientToControlRot();
 	}
 
 	if (bDodging)

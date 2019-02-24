@@ -422,3 +422,13 @@ void AJHero::Revive()
 	Health = MaxHealth;
 	mLifeAlert->Destroy();
 }
+
+void AJHero::OrientToControlRot()
+{
+	const FRotator Rotation = Controller->GetControlRotation();
+	FRotator PlayerRotation = GetActorRotation();
+
+	PlayerRotation.Yaw = Rotation.Yaw;
+
+	SetActorRotation(PlayerRotation);
+}
