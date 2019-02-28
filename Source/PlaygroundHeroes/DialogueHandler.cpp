@@ -124,7 +124,7 @@ void ADialogueHandler::setNewText() {
 		centerText = " ";
 		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
 			player1Text = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player1Font = fontTypes[lineNumber];
 			}
@@ -132,7 +132,7 @@ void ADialogueHandler::setNewText() {
 
 			lineNumber++;
 			player2Text = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player2Font = fontTypes[lineNumber];
 			}
@@ -147,7 +147,7 @@ void ADialogueHandler::setNewText() {
 		player2Text = " ";
 		if (dialogueLines.IsValidIndex(lineNumber)) {
 			centerText = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
 
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				centerFont = fontTypes[lineNumber];
