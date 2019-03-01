@@ -16,8 +16,7 @@
 #include "Engine.h"
 
 // Sets default values
-AJHero::AJHero()
-{
+AJHero::AJHero(){ //2 sneaky
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	PrimaryActorTick.bCanEverTick = true;

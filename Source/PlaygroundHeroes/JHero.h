@@ -7,8 +7,7 @@
 #include "JHero.generated.h"
 
 UCLASS()
-class PLAYGROUNDHEROES_API AJHero : public ACharacter
-{
+class PLAYGROUNDHEROES_API AJHero : public ACharacter{
 	GENERATED_BODY()
 	
 	TSubclassOf<class AActor> LifeAlert;
