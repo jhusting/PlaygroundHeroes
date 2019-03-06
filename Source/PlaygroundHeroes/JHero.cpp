@@ -84,7 +84,12 @@ void AJHero::BeginPlay()
 	
 }
 
-void AJHero::Tick(float DeltaTime)
+void AJHero::Tick(float DeltaTime) 
+{
+	Super::Tick(DeltaTime);
+}
+
+void AJHero::CppTick(float DeltaTime)
 {
 	if (TimeSinceLastInput >= InputQueueTime)
 	{

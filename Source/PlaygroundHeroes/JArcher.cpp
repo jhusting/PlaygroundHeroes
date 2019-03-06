@@ -34,6 +34,11 @@ AJArcher::AJArcher()
 
 void AJArcher::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+}
+
+void AJArcher::CppTick(float DeltaTime)
+{
 	if (timeHeld >= 0.f)
 		timeHeld += DeltaTime;
 
