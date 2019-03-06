@@ -69,6 +69,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void CppTick(float DeltaTime);
+
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();

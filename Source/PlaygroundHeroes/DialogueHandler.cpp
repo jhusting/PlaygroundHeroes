@@ -139,7 +139,7 @@ void ADialogueHandler::setNewText() {
 			else player2Font = defaultFont;
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
+			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
 		}
 	}
 	else {
@@ -155,7 +155,7 @@ void ADialogueHandler::setNewText() {
 			else centerFont = defaultFont;
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
 		}
 	}
 	//reset time counter
