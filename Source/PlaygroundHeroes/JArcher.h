@@ -18,6 +18,9 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 
 	virtual void Tick(float DeltaTime) override;
 
+	//UFUNCTION(BlueprintCallable)
+	virtual void CppTick(float DeltaTime) override;
+
 	AActor* mArrow = nullptr;
 
 public:
