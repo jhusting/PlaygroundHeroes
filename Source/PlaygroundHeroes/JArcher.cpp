@@ -171,7 +171,7 @@ void AJArcher::LockCameraHelper()
 
 void AJArcher::Attack()
 {
-	if (Stamina > 0.f && !bHasFallen && !bDodging)
+	if (Stamina > 0.f && bCanAttack && !bDodging)
 	{
 		if (bInputtingDodge) 
 		{
