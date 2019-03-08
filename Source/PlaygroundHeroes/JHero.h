@@ -51,6 +51,8 @@ public:
 
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
 
+	FORCEINLINE bool GetStunned() { return bStunned;  }
+
 	FORCEINLINE bool GetHasFallen() { return bHasFallen; }
 
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
@@ -109,6 +111,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Stun();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Unstun();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Die();
@@ -177,7 +185,16 @@ protected:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bCanDodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bCanInteract;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bCanAttack;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bStunned;
+
 	/*
 		Determines if player has fallen and can't get up
 	*/
