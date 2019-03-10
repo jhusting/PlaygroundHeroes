@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "JEnemy.generated.h"
 
 UCLASS()
-class PLAYGROUNDHEROES_API AJEnemy : public AActor
+class PLAYGROUNDHEROES_API AJEnemy : public ACharacter
 {
 	GENERATED_BODY()
 
