@@ -117,9 +117,9 @@ void AJHero::CppTick(float DeltaTime)
 	else
 	{
 		if (!bAttacking)
-			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, MaxStamina);
 		else
-			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, MaxStamina);
 	}
 
 	if (!bHasFallen) 
@@ -129,6 +129,16 @@ void AJHero::CppTick(float DeltaTime)
 			Die();
 		}
 	}
+}
+
+float AJHero::SetMaxStamina(float n)
+{
+	MaxStamina = FMath::Clamp(n, 5.f, 100.f);
+
+	if (Stamina > MaxStamina)
+		Stamina = MaxStamina;
+
+	return MaxStamina;
 }
 
 // Called to bind functionality to input

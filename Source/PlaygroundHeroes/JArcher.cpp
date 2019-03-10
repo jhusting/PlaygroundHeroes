@@ -72,9 +72,9 @@ void AJArcher::CppTick(float DeltaTime)
 	if (!bDodging)
 	{
 		if(!bAttacking)
-			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, MaxStamina);
 		else
-			Stamina = FMath::Clamp(Stamina + (StaminaGen/4) * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + (StaminaGen/4) * DeltaTime, -50.f, MaxStamina);
 	}
 
 	if (!bHasFallen) {
