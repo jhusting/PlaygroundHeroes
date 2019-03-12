@@ -25,6 +25,14 @@ public:
 	// Sets default values for this character's properties
 	AJHero();
 
+	//If you want the player to move to a location upon level change
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	static bool MoveToNewLocationOnPlay;
+
+	//Vector 3 intended for use to keep a desired new location, static makes it persistent through level changes
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	static FVector LocationToMoveTo;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -38,7 +46,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool interacting;
-
+	
 	FORCEINLINE bool GetAttacking() const { return bAttacking; }
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
@@ -242,10 +250,10 @@ protected:
 	/*
 		The amount of stamina generated every second
 	*/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float StaminaGen;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float AttackCost;
 
 	/*
