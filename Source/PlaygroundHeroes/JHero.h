@@ -39,11 +39,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool interacting;
 
-	FORCEINLINE float GetMaxStamina() const { return MaxStamina; }
-
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	float SetMaxStamina(float x);
-
 	FORCEINLINE bool GetAttacking() const { return bAttacking; }
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
