@@ -65,7 +65,7 @@ public:
 		void SetHealth(float NewHealth);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-		void AddHealth(float Change, FString MoveName);
+		virtual void AddHealth(float Change, FString MoveName);
 
 	// Adds MoveName to the recently hit by list
 	// Knight Move Names: KnightAttack1, KnightAttack2, KnightAttack3
