@@ -16,8 +16,7 @@
 #include "Engine.h"
 
 // Sets default values
-AJHero::AJHero()
-{
+AJHero::AJHero(){ //2 sneaky
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 	PrimaryActorTick.bCanEverTick = true;
@@ -70,6 +69,8 @@ AJHero::AJHero()
 	bInputtingDodge = false;
 	bDodging = false;
 	bCanDodge = true;
+	bCanAttack = true;
+	bCanInteract = true;
 	MovementModifier = 1.0f;
 	deathMovementModifier = 0.01f;
 	TimeSinceLastInput = -1.f;
@@ -85,7 +86,12 @@ void AJHero::BeginPlay()
 	
 }
 
-void AJHero::Tick(float DeltaTime)
+void AJHero::Tick(float DeltaTime) 
+{
+	Super::Tick(DeltaTime);
+}
+
+void AJHero::CppTick(float DeltaTime)
 {
 	if (TimeSinceLastInput >= InputQueueTime)
 	{
@@ -111,9 +117,9 @@ void AJHero::Tick(float DeltaTime)
 	else
 	{
 		if (!bAttacking)
-			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, MaxStamina);
 		else
-			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, 100.f);
+			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, MaxStamina);
 	}
 
 	if (!bHasFallen) 
@@ -123,6 +129,16 @@ void AJHero::Tick(float DeltaTime)
 			Die();
 		}
 	}
+}
+
+float AJHero::SetMaxStamina(float n)
+{
+	MaxStamina = FMath::Clamp(n, 5.f, 100.f);
+
+	if (Stamina > MaxStamina)
+		Stamina = MaxStamina;
+
+	return MaxStamina;
 }
 
 // Called to bind functionality to input
@@ -219,9 +235,15 @@ void AJHero::MoveRight(float Value)
 	}
 }
 
+void AJHero::ResetInputBools()
+{
+	bAttacking = false;
+	bDodging = false;
+}
+
 void AJHero::Attack()
 {
-	if (!bHasFallen) 
+	if (bCanAttack) 
 	{
 		bInputtingAttack = true;
 		TimeSinceLastInput = 0.f;
@@ -259,27 +281,27 @@ bool AJHero::AttackHelper()
 
 void AJHero::Dodge()
 {
-	if (!bHasFallen) 
+	bInputtingDodge = true;
+	TimeSinceLastInput = 0.f;
+	
+	if (bInputtingAttack)
 	{
-		bInputtingDodge = true;
-		TimeSinceLastInput = 0.f;
-
-		if (bInputtingAttack)
-		{
-			bInputtingAttack = false;
-		}
-		if (!bDodging && bCanDodge) 
-		{
-			DodgeHelper();
-		}
+		bInputtingAttack = false;
+	}
+		
+	if (!bDodging && bCanDodge) 
+	{
+		DodgeHelper();
 	}
 }
 
 void AJHero::InteractPressed()
 {
-	interacting = true;
-	UE_LOG(LogClass, Warning, TEXT("yes"));
-
+	if (bCanInteract)
+	{
+		interacting = true;
+		UE_LOG(LogClass, Warning, TEXT("yes"));
+	}
 }
 
 void AJHero::InteractReleased() 
@@ -387,6 +409,32 @@ void AJHero::LockCameraHelper()
 	SetActorRotation(PlayerRotation);
 }
 
+void AJHero::Stun() 
+{
+	if(!bHasFallen)
+	{
+		bAttacking = false;
+		bDodging = false;
+
+		bStunned = true;
+		MovementModifier = 0.0;
+		bCanDodge = false;
+		bCanAttack = false;
+		bCanInteract = false;
+	}
+}
+
+void AJHero::Unstun()
+{
+	if (!bHasFallen) {
+		bStunned = false;
+		MovementModifier = 1.0;
+		bCanDodge = true;
+		bCanAttack = true;
+		bCanInteract = true;
+	}
+}
+
 void AJHero::Die() 
 {
 	UE_LOG(LogTemp, Warning, TEXT("Running Die!"));
@@ -404,15 +452,34 @@ void AJHero::Die()
 			mLifeAlert = lfAlert;
 		}
 	}
+	bAttacking = false;
+	bDodging = false;
 	
 	bHasFallen = true;
+	bStunned = false;
+	bCanDodge = false;
+	bCanAttack = false;
+	bCanInteract = false;
 	MovementModifier = deathMovementModifier;
 }
 
 void AJHero::Revive()
 {
 	bHasFallen = false;
+	bCanDodge = true;
+	bCanAttack = true;
+	bCanInteract = true;
 	MovementModifier = 1.0f;
 	Health = MaxHealth;
 	mLifeAlert->Destroy();
+}
+
+void AJHero::OrientToControlRot()
+{
+	const FRotator Rotation = Controller->GetControlRotation();
+	FRotator PlayerRotation = GetActorRotation();
+
+	PlayerRotation.Yaw = Rotation.Yaw;
+
+	SetActorRotation(PlayerRotation);
 }

@@ -35,6 +35,7 @@ public:
 	bool canAdvance;
 	bool dialogueSent;
 	bool inputSent;
+	bool inputReady;
 	bool KnightDidInput;
 	bool ArcherDidInput;
 

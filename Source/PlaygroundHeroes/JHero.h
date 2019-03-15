@@ -7,8 +7,7 @@
 #include "JHero.generated.h"
 
 UCLASS()
-class PLAYGROUNDHEROES_API AJHero : public ACharacter
-{
+class PLAYGROUNDHEROES_API AJHero : public ACharacter{
 	GENERATED_BODY()
 	
 	TSubclassOf<class AActor> LifeAlert;
@@ -40,6 +39,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool interacting;
 
+	FORCEINLINE float GetMaxStamina() const { return MaxStamina; }
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	float SetMaxStamina(float x);
+
 	FORCEINLINE bool GetAttacking() const { return bAttacking; }
 
 	FORCEINLINE bool GetDodging() const { return bDodging; }
@@ -51,6 +55,8 @@ public:
 	FORCEINLINE FVector GetInputDirection() const {return InputDirection;}
 
 	FORCEINLINE bool GetIsLocked() { return bIsLocked; }
+
+	FORCEINLINE bool GetStunned() { return bStunned;  }
 
 	FORCEINLINE bool GetHasFallen() { return bHasFallen; }
 
@@ -70,6 +76,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void CppTick(float DeltaTime);
+
 protected:
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();
@@ -87,6 +96,9 @@ protected:
 	/** Called for side to side input */
 	virtual void MoveRight(float Value);
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void ResetInputBools();
+
 	UFUNCTION(Category = "Combat")
 	virtual void Attack();
 
@@ -102,15 +114,23 @@ protected:
 	UFUNCTION(Category = "Combat")
 	void InteractReleased();
 
-
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	bool DodgeHelper();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Stun();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Unstun();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Die();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Revive();
+
+	UFUNCTION(BlueprintCallable, Category = "Playground")
+	void OrientToControlRot();
 	/**
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -170,7 +190,16 @@ protected:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bCanDodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bCanInteract;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bCanAttack;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bStunned;
+
 	/*
 		Determines if player has fallen and can't get up
 	*/

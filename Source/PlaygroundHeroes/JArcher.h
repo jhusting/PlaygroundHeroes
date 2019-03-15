@@ -18,8 +18,10 @@ class PLAYGROUNDHEROES_API AJArcher : public AJHero
 
 	virtual void Tick(float DeltaTime) override;
 
+	//UFUNCTION(BlueprintCallable)
+	virtual void CppTick(float DeltaTime) override;
+
 	AActor* mArrow = nullptr;
-	float timeHeld = -1.f;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
@@ -36,6 +38,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float HoldTimeNeeded;
+
+	UPROPERTY(BlueprintReadOnly)
+	float timeHeld;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float minimumHoldTime;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

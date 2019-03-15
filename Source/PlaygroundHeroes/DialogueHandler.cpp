@@ -76,6 +76,15 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	setNewText();
 }
 
+void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
+	lastSendWasInput = false;
+	toggleSplitMode(true);
+	TArray<float> dummyDurations;
+	sendNewdialogueSequence(inputs, dummyDurations, fonts);
+	pause();
+	dialogueFinished = false;
+	lastSendWasInput = true;
+}
 
 void ADialogueHandler::updateDialogue(float DeltaTime) {
 	if (paused) return; //Keep updateDialogue from running if paused.
@@ -115,7 +124,7 @@ void ADialogueHandler::setNewText() {
 		centerText = " ";
 		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
 			player1Text = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player1Font = fontTypes[lineNumber];
 			}
@@ -123,14 +132,14 @@ void ADialogueHandler::setNewText() {
 
 			lineNumber++;
 			player2Text = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player2Font = fontTypes[lineNumber];
 			}
 			else player2Font = defaultFont;
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
+			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
 		}
 	}
 	else {
@@ -138,7 +147,7 @@ void ADialogueHandler::setNewText() {
 		player2Text = " ";
 		if (dialogueLines.IsValidIndex(lineNumber)) {
 			centerText = dialogueLines[lineNumber];
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
 
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				centerFont = fontTypes[lineNumber];
@@ -146,11 +155,59 @@ void ADialogueHandler::setNewText() {
 			else centerFont = defaultFont;
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
 		}
 	}
 	//reset time counter
 	timeSinceLastLineChange = 0.0f;
+}
+
+void ADialogueHandler::saveDialogue() {
+	savedLines.Empty();
+	savedDurations.Empty();
+	savedFonts.Empty();
+
+	savedLines.Append(dialogueLines);
+	savedDurations.Append(dialogueDurations);
+	savedFonts.Append(fontTypes);
+
+	savedMaxLines = maxLines;
+	savedSplitMode = splitMode;
+	savedWasInput = lastSendWasInput;
+	if (savedWasInput) {
+		savedLineNumber = 0;
+	}
+	else {
+		savedLineNumber = lineNumber;
+	}
+}
+
+void ADialogueHandler::loadSavedDialogue() {
+	dialogueLines.Empty();
+	dialogueDurations.Empty();
+	fontTypes.Empty();
+
+	dialogueLines.Append(savedLines);
+	dialogueDurations.Append(savedDurations);
+	fontTypes.Append(savedFonts);
+
+	lineNumber = savedLineNumber;
+	maxLines = savedMaxLines;
+	splitMode = savedSplitMode;
+
+	dialogueFinished = false;
+	renderWidget = true;
+
+	if (savedWasInput) {
+		paused = true;
+		lastSendWasInput = true;
+	}
+	else {
+		paused = false;
+		lastSendWasInput = false;
+	}
+
+	setNewText();
 }
 
 void ADialogueHandler::pause() {
@@ -183,15 +240,6 @@ void ADialogueHandler::clear() {
 	player1Text = " ";
 	player2Text = " ";
 	renderWidget = false;
-	paused = true;
-}
-
-void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
-	lastSendWasInput = false;
-	toggleSplitMode(true);
-	TArray<float> dummyDurations;
-	sendNewdialogueSequence(inputs, dummyDurations, fonts);
-	pause();
 	dialogueFinished = true;
-	lastSendWasInput = true;
+	paused = true;
 }
