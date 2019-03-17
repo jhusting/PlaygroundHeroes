@@ -101,6 +101,8 @@ AJTutorial::AJTutorial()
 	fonts6.Add(2);
 	lines6.Add("LEILA: Of course silly... ");
 	fonts6.Add(1);
+	lines6.Add("LEILA: The forest is just past that big tree over there, I am ready when you are");
+	fonts6.Add(1);
 }
 
 // Called when the game starts or when spawned
@@ -299,9 +301,12 @@ void AJTutorial::Tick(float DeltaTime)
 		}
 
 		if(inputReady){
-			if (knight->GetIsLocked() && (knight->GetInputAttack() || knight->GetAttacking())) KnightDidInput = true;
-			if ((archer->GetInputDodge() || archer->GetDodging())) ArcherDidInput = true;
-
+			if (/*knight->GetIsLocked() ||*/ knight->GetInputAttack() || knight->GetAttacking()) {
+				KnightDidInput = true;
+			}
+			if ((archer->GetInputDodge() || archer->GetDodging())) {
+				ArcherDidInput = true;
+			}
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();
 				Step++;
@@ -317,9 +322,15 @@ void AJTutorial::Tick(float DeltaTime)
 			sendInputText(inputs2, inputFonts);
 		}
 
-		if(inputReady){
-			if (archer->GetIsLocked() && (archer->GetInputAttack() || archer->GetAttacking())) ArcherDidInput = true;
-			if (knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+		if (inputReady) {
+			if (/*archer->GetIsLocked() &&*/ archer->GetInputAttack() || archer->GetAttacking()) {
+				ArcherDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Archer"))
+			}
+			if (knight->GetInputDodge() || knight->GetDodging()) {
+				KnightDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Knight"))
+			}
 
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();
@@ -338,9 +349,14 @@ void AJTutorial::Tick(float DeltaTime)
 		}
 
 		if (inputReady) {
-			if (archer->GetInputAttack() || archer->GetAttacking()) ArcherDidInput = true;
-			if (knight->GetBlocking()) KnightDidInput = true;
-
+			if (archer->GetInputAttack() || archer->GetAttacking()) {
+				ArcherDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Archer"))
+			}
+			if (knight->GetBlocking()) {
+				KnightDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Knight"))
+			}
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();
 				Step++;	
@@ -359,8 +375,15 @@ void AJTutorial::Tick(float DeltaTime)
 		}
 
 		if (inputReady) {
-			if (archer->GetInputAttack() || archer->GetAttacking() || archer->GetInputDodge() || archer->GetDodging()) ArcherDidInput = true;
-			if (knight->GetInputAttack() || knight->GetAttacking() || knight->GetInputDodge() || knight->GetDodging()) KnightDidInput = true;
+			if (archer->GetInputAttack() || archer->GetAttacking() || archer->GetInputDodge() || archer->GetDodging()) {
+				ArcherDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Archer"))
+			}
+			if (knight->GetInputAttack() || knight->GetAttacking() || knight->GetInputDodge() || knight->GetDodging()){ 
+				KnightDidInput = true;
+			//	UE_LOG(LogTemp, Error, TEXT("Knight"))
+			}
+
 			if (KnightDidInput && ArcherDidInput) {
 				postInput();
 				Step++;
