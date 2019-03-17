@@ -301,7 +301,7 @@ void AJTutorial::Tick(float DeltaTime)
 		}
 
 		if(inputReady){
-			if (/*knight->GetIsLocked() ||*/ knight->GetInputAttack() || knight->GetAttacking()) {
+			if (/*knight->GetIsLocked() &&*/ knight->GetInputAttack() || knight->GetAttacking()) {
 				KnightDidInput = true;
 			}
 			if ((archer->GetInputDodge() || archer->GetDodging())) {
