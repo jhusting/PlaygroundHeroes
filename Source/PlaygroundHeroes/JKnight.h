@@ -39,7 +39,7 @@ protected:
 		The grace period (in seconds) for a perfect block. If an attack hits the knight
 		and the knight has held block for less than this time, it is a perfect block
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float PerfectBlockTime;
 
 	/*
