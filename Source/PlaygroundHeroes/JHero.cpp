@@ -166,10 +166,39 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AJHero::LookUpAtRate);
 }
 
-void AJHero::AddHealth(float Change)
+void AJHero::AddHealth(float Change, float StaggerTime)
 {
 	if (!bDodging)
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+
+	if (StaggerTime > 0.0f && !bStunned)
+		Stagger(StaggerTime);
+}
+
+void AJHero::Stagger(float StaggerTime)
+{
+	prevMovement = 1.0;
+	bAttacking = false;
+	bDodging = false;
+
+	if (!bStaggered) prevMovement = MovementModifier;
+
+	MovementModifier = 0.0;
+	bCanDodge = false;
+	bCanAttack = false;
+	bCanInteract = false;
+	bStaggered = true;
+
+	GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+}
+
+void AJHero::UnStagger()
+{
+	MovementModifier = prevMovement;
+	bCanDodge = true;
+	bCanAttack = true;
+	bCanInteract = true;
+	bStaggered = false;
 }
 
 void AJHero::TestFunction() 
