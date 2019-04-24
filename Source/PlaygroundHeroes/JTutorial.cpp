@@ -33,7 +33,7 @@ AJTutorial::AJTutorial()
 	fonts2.Add(1);
 
 	inputs1.Add("<Player 1: Hold a direction with the left stick and press B to Dodge>");
-	inputs1.Add("<Player 2: Press the Right Stick to Lock On to a target. When in melee range press RB to Attack>");
+	inputs1.Add("<Player 2: When in melee range press RB to Attack>");
 
 	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
 	fonts3.Add(1);
@@ -42,7 +42,7 @@ AJTutorial::AJTutorial()
 	lines3.Add("ABIGAIL: Ok, stand back!");
 	fonts3.Add(2);
 
-	inputs2.Add("<Player 1: Right Stick to focus on a target. Hold RB to charge an arrow, release to Shoot>");
+	inputs2.Add("<Player 1: Hold RB to charge an arrow, release to Shoot>");
 	inputs2.Add("<Player 2: Hold a direction with the left stick and press B to Dodge>");
 
 	lines4.Add("ABIGAIL: Even though we haven't battled in ages, it's all coming back to me now.");

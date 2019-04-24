@@ -367,13 +367,17 @@ void AJHero::LockCamera()
 			if (JEnemyItr)
 			{
 				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), JEnemyItr->GetActorLocation()).Clamp();
+				//FRotator camRotation = GetControlRotation().Clamp();
 				FRotator camRotation = GetControlRotation().Clamp();
+
+				float angDiff = UKismetMathLibrary::NormalizedDeltaRotator(newRotation, camRotation).Yaw;
+				angDiff = UKismetMathLibrary::Abs(angDiff);
 
 				float emAngle = UKismetMathLibrary::Abs(camRotation.Yaw - newRotation.Yaw);
 				
-				if (emAngle < closestAngle)
+				if (angDiff < closestAngle)
 				{
-					closestAngle = emAngle;
+					closestAngle = angDiff;
 					closest = JEnemyItr;
 				}
 			}

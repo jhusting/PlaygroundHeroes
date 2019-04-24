@@ -2,6 +2,8 @@
 
 #include "JKnight.h"
 #include "Components/InputComponent.h"
+#include "TimerManager.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AJKnight::AJKnight()
 {
@@ -9,12 +11,65 @@ AJKnight::AJKnight()
 
 	bCanDamage = false;
 	bBlocking = false;
+	PerfectBlockTime = 0.15f;
 }
 
 void AJKnight::AddHealth(float Change)
 {
-	if (!(bDodging || bBlocking))
+	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
+	{
+		Stamina = FMath::Clamp(Stamina + Change / 4.f, 0.f, 100.f);
+		PerfectBlockPart();
+	}
+	else if (bBlocking)
+	{
+		Stamina = FMath::Clamp(Stamina + Change / .8f, 0.f, 100.f);
+		BlockPart();
+	}
+	else if (!bDodging)
+	{
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+	}
+}
+
+void AJKnight::CppTick(float DeltaTime)
+{
+	if (TimeSinceLastInput >= InputQueueTime)
+	{
+		bInputtingAttack = false;
+		bInputtingDodge = false;
+		TimeSinceLastInput = -1.f;
+	}
+	else if (TimeSinceLastInput >= 0.f)
+	{
+		TimeSinceLastInput += DeltaTime;
+	}
+
+	if (bIsLocked)
+	{
+		LockCameraHelper();
+	}
+
+	if (bDodging)
+	{
+		FVector NewLocation = UKismetMathLibrary::VLerp(GetActorLocation(), DodgeLocation, .043);
+		//SetActorLocation(NewLocation, true);
+	}
+	else
+	{
+		if (!bAttacking && !bBlocking)
+			Stamina = FMath::Clamp(Stamina + StaminaGen * DeltaTime, -50.f, MaxStamina);
+		else
+			Stamina = FMath::Clamp(Stamina + (StaminaGen / 4) * DeltaTime, -50.f, MaxStamina);
+	}
+
+	if (!bHasFallen)
+	{
+		if (Health <= 0.f)
+		{
+			Die();
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -89,12 +144,30 @@ void AJKnight::Dodge()
 
 void AJKnight::Block()
 {
-	if(!bDodging && !bAttacking)
+	if (!bDodging && !bAttacking)
+	{
 		bBlocking = true;
+		GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
+	}
 }
 
 void AJKnight::BlockReleased()
 {
 	if(bBlocking)
 		bBlocking = false;
+}
+
+void AJKnight::PerfectBlockEnd()
+{
+	UE_LOG(LogClass, Warning, TEXT("Perfect End"));
+}
+
+void AJKnight::BlockPart_Implementation()
+{
+	UE_LOG(LogClass, Log, TEXT("Regular Block"));
+}
+
+void AJKnight::PerfectBlockPart_Implementation()
+{
+	UE_LOG(LogClass, Log, TEXT("PERFECT Block"));
 }

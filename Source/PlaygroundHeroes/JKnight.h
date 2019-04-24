@@ -20,6 +20,7 @@ public:
 	FORCEINLINE bool GetBlocking() const { return bBlocking; }
 
 	virtual void AddHealth(float Change);
+	virtual void CppTick(float DeltaTime);
 	
 protected:
 	/*
@@ -34,6 +35,20 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bBlocking;
 
+	/*
+		The grace period (in seconds) for a perfect block. If an attack hits the knight
+		and the knight has held block for less than this time, it is a perfect block
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float PerfectBlockTime;
+
+	/*
+		This timer handle keeps track of the "perfect block" mechanic. If this handle is active,
+		that means block was pressed less than PerfectBlockTime seconds ago
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	FTimerHandle PerfectBlockTHandle;
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
@@ -44,4 +59,15 @@ protected:
 	void Block();
 	void BlockReleased();
 	void Dodge();
+
+	UFUNCTION()
+	void PerfectBlockEnd();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void BlockPart();
+	virtual void BlockPart_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void PerfectBlockPart();
+	virtual void PerfectBlockPart_Implementation();
 };
