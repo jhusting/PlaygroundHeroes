@@ -42,6 +42,12 @@ protected:
 
 	bool bBlockAttempted;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* BlockStaggerMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float BlockStaggerMontageDuration;
+
 	/*
 		The grace period (in seconds) for a perfect block. If an attack hits the knight
 		and the knight has held block for less than this time, it is a perfect block

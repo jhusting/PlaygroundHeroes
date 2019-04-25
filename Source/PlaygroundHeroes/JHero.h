@@ -207,7 +207,7 @@ protected:
 	bool bStunned;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-		bool bStaggered;
+	bool bStaggered;
 
 	/*
 		Determines if player has fallen and can't get up
@@ -285,6 +285,12 @@ protected:
 	FVector InputDirection;
 
 	FVector DodgeLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* StaggerMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float StaggerMontageDuration;
 
 	/*
 		A pointer to the target you are currently locked on to

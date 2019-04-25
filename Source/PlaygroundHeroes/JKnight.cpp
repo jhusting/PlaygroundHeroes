@@ -26,15 +26,13 @@ void AJKnight::AddHealth(float Change, float StaggerTime)
 		Stamina = FMath::Clamp(Stamina + Change / .8f, 0.f, 100.f);
 		BlockPart();
 		if(StaggerTime > 0.0f)
-		{
-			StaggerTime = StaggerTime / 2.0f;
 			Stagger(StaggerTime);
-		}
 	}
 	else if (!bDodging)
 	{
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
-		Stagger(StaggerTime);
+		if(StaggerTime > 0.0f)
+			Stagger(StaggerTime);
 	}
 }
 
@@ -44,30 +42,47 @@ void AJKnight::Stagger(float StaggerTime) {
 	bDodging = false;
 
 	if (!bStaggered) prevMovement = MovementModifier;
-
-	MovementModifier = 0.0;
+	if (!bHasFallen && !bStunned) MovementModifier = 0.0;
 
 	bCanDodge = false;
 	bCanAttack = false;
 	bCanInteract = false;
 	bStaggered = true;
 
-	GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+	float playrate;
+
+	if (bBlocking) 
+	{
+		StaggerTime = StaggerTime / 2.0f;
+		playrate = BlockStaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(BlockStaggerMontage, playrate, FName(TEXT("Default")) );
+	}
+	else
+	{
+		playrate = StaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+	}
+
+	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
 void AJKnight::UnStagger() {
-	MovementModifier = prevMovement;
-	bCanDodge = true;
-	bCanAttack = true;
-	bCanInteract = true;
-	bStaggered = false;
 
-	if (bBlockAttempted) {
-		Block();
-	}
-	else 
+	if (!bHasFallen && !bStunned)
 	{
-		BlockReleased();
+		MovementModifier = prevMovement;
+		bCanDodge = true;
+		bCanAttack = true;
+		bCanInteract = true;
+		bStaggered = false;
+
+		if (bBlockAttempted) {
+			Block();
+		}
+		else
+		{
+			BlockReleased();
+		}
 	}
 }
 

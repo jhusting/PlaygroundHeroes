@@ -182,23 +182,27 @@ void AJHero::Stagger(float StaggerTime)
 	bDodging = false;
 
 	if (!bStaggered) prevMovement = MovementModifier;
-
-	MovementModifier = 0.0;
+	if(!bHasFallen && !bStunned) MovementModifier = 0.0;
 	bCanDodge = false;
 	bCanAttack = false;
 	bCanInteract = false;
 	bStaggered = true;
 
-	GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+	float playrate = StaggerMontageDuration / StaggerTime;
+	PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
 void AJHero::UnStagger()
 {
-	MovementModifier = prevMovement;
-	bCanDodge = true;
-	bCanAttack = true;
-	bCanInteract = true;
-	bStaggered = false;
+	if (!bHasFallen && !bStunned)
+	{
+		MovementModifier = prevMovement;
+		bCanDodge = true;
+		bCanAttack = true;
+		bCanInteract = true;
+		bStaggered = false;
+	}
 }
 
 void AJHero::TestFunction() 
@@ -454,6 +458,7 @@ void AJHero::Stun()
 		bCanDodge = false;
 		bCanAttack = false;
 		bCanInteract = false;
+		bStaggered = false;
 	}
 }
 
@@ -490,6 +495,7 @@ void AJHero::Die()
 	
 	bHasFallen = true;
 	bStunned = false;
+	bStaggered = false;
 	bCanDodge = false;
 	bCanAttack = false;
 	bCanInteract = false;
