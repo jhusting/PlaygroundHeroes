@@ -15,93 +15,128 @@ AJTutorial::AJTutorial()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//set default dialogue lines:
-	lines1.Add("LEILA: Now, although we may be the strongest fighters in all the land, we still need to practice!");
+	chars1.Add("LEILA");
+	lines1.Add("Now, although we may be the strongest fighters in all the land, we still need to practice!");
 	fonts1.Add(1);
-	lines1.Add("LEILA: We can't be rusty when we battle Zorrander.");
+	chars1.Add("LEILA");
+	lines1.Add("We can't be rusty when we battle Zorrander.");
 	fonts1.Add(1);
-	lines1.Add("LEILA: First let's get used to moving around in our armor again.");
+	chars1.Add("LEILA");
+	lines1.Add("First let's get used to moving around in our armor again.");
 	fonts1.Add(1);
 
 	inputs0.Add("<Player 1: Use left stick to move>");
 	inputs0.Add("<Player 2: Use left stick to move>");
 	inputFonts.Add(0);
 	inputFonts.Add(0);
+	inputChars.Add("");
+	inputChars.Add("");
 
-	lines2.Add("ABIGAIL: Bet you can't hit me with your sword!");
+	chars2.Add("ABIGAIL");
+	lines2.Add("Bet you can't hit me with your sword!");
 	fonts2.Add(2);
-	lines2.Add("LEILA: Oh yeah? We'll see about that!");
+	chars2.Add("LEILA");
+	lines2.Add("Oh yeah? We'll see about that!");
 	fonts2.Add(1);
 
 	inputs1.Add("<Player 1: Hold a direction with the left stick and press B to Dodge>");
 	inputs1.Add("<Player 2: When in melee range press RB to Attack>");
 
-	lines3.Add("LEILA: Nice job! I think we're almost ready for our adventure. ");
+	chars3.Add("LEILA");
+	lines3.Add("Nice job! I think we're almost ready for our adventure. ");
 	fonts3.Add(1);
-	lines3.Add("LEILA: Now try to hit me with an arrow!");
+	chars3.Add("LEILA");
+	lines3.Add("Now try to hit me with an arrow!");
 	fonts3.Add(1);
-	lines3.Add("ABIGAIL: Ok, stand back!");
+	chars3.Add("ABIGIAL");
+	lines3.Add("Ok, stand back!");
 	fonts3.Add(2);
 
 	inputs2.Add("<Player 1: Hold RB to charge an arrow, release to Shoot>");
 	inputs2.Add("<Player 2: Hold a direction with the left stick and press B to Dodge>");
 
-	lines4.Add("ABIGAIL: Even though we haven't battled in ages, it's all coming back to me now.");
+	chars4.Add("ABIGAIL");
+	lines4.Add("Even though we haven't battled in ages, it's all coming back to me now.");
 	fonts4.Add(2);
-	lines4.Add("ABIGAIL: Why don't you try blocking an arrow with your shield?");
+	chars4.Add("ABIGAIL");
+	lines4.Add("Why don't you try blocking an arrow with your shield?");
 	fonts4.Add(2);
 
 	inputs3.Add("<Player 1: Hold RB to charge an arrow, release to Shoot>");
 	inputs3.Add("<Player 2: Hold the LB to Block an incoming attack>");
 
-	lines5.Add("LEILA: *huffs* Good fight.");
+	chars5.Add("LEILA");
+	lines5.Add("*huffs* Good fight.");
 	fonts5.Add(1);
-	lines5.Add("LEILA: We can keep training if you'd like,");
+	chars5.Add("LEILA");
+	lines5.Add("We can keep training if you'd like,");
 	fonts5.Add(1);
-	lines5.Add("LEILA: but I think we're about ready to head into the forest.");
+	chars5.Add("LEILA");
+	lines5.Add("but I think we're about ready to head into the forest.");
 	fonts5.Add(1);
 
 	inputs4.Add("<Player 1: Take any action>");
 	inputs4.Add("<Player 2: Take any action>");
 
-	lines6.Add("LEILA: Now we have to be careful on our journey to find Zorrander,");
+	chars6.Add("LEILA");
+	lines6.Add("Now we have to be careful on our journey to find Zorrander,");
 	fonts6.Add(1);
-	lines6.Add("LEILA: he's going to do everything in his power to stop us from reaching him.");
+	chars6.Add("LEILA");
+	lines6.Add("he's going to do everything in his power to stop us from reaching him.");
 	fonts6.Add(1);
-	lines6.Add("LEILA: What do we know about him?");
+	chars6.Add("LEILA");
+	lines6.Add("What do we know about him?");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Well, when he learned that the two strongest heroes were on their way to his lair,");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Well, when he learned that the two strongest heroes were on their way to his lair,");
 	fonts6.Add(2);
-	lines6.Add("ABIGAIL: he got scared that his evil plans would be ruined! ");
+	chars6.Add("ABIGAIL");
+	lines6.Add("he got scared that his evil plans would be ruined! ");
 	fonts6.Add(2);
-	lines6.Add("ABIGAIL: So, to protect himself he created powerful monsters to guard the forest and stop us from reaching him.");
+	chars6.Add("ABIGAIL");
+	lines6.Add("So, to protect himself he created powerful monsters to guard the forest and stop us from reaching him.");
 	fonts6.Add(2);
-	lines6.Add("LEILA: Like that will stop us!");
+	chars6.Add("LEILA");
+	lines6.Add("Like that will stop us!");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Of course it won't! But he believed that only the purest evil would be strong enough to stop us... ");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Of course it won't! But he believed that only the purest evil would be strong enough to stop us... ");
 	fonts6.Add(2);
-	lines6.Add("ABIGAIL: so he created each monster using a piece of his black heart. The monsters are all a part of him.");
+	chars6.Add("ABIGAIL");
+	lines6.Add("so he created each monster using a piece of his black heart. The monsters are all a part of him.");
 	fonts6.Add(2);
-	lines6.Add("LEILA: Hmm so that must mean if we defeat the monsters Zorrander becomes weaker?");
+	chars6.Add("LEILA");
+	lines6.Add("Hmm so that must mean if we defeat the monsters Zorrander becomes weaker?");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Yes, but each monster will try their best to keep us out of the forest.");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Yes, but each monster will try their best to keep us out of the forest.");
 	fonts6.Add(2);
-	lines6.Add("ABIGAIL: They can see our deepest darkest fears and will use that to try and scare us away.");
+	chars6.Add("ABIGAIL");
+	lines6.Add("They can see our deepest darkest fears and will use that to try and scare us away.");
 	fonts6.Add(2);
-	lines6.Add("LEILA: ...They know our deepest darkest fears...?");
+	chars6.Add("LEILA");
+	lines6.Add("...They know our deepest darkest fears...?");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Yup but that's ok because we're the bravest heroes!");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Yup but that's ok because we're the bravest heroes!");
 	fonts6.Add(2);
-	lines6.Add("LEILA: You're right, they won't scare us.");
+	chars6.Add("LEILA");
+	lines6.Add("You're right, they won't scare us.");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Leila, what's your greatest fear?");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Leila, what's your greatest fear?");
 	fonts6.Add(2);
-	lines6.Add("LEILA: ... My greatest fear is... losing you.");
+	chars6.Add("LEILA");
+	lines6.Add("... My greatest fear is... losing you.");
 	fonts6.Add(1);
-	lines6.Add("ABIGAIL: Losing me? That seems pretty lame. Don't worry, we'll always be together! Right?");
+	chars6.Add("ABIGAIL");
+	lines6.Add("Losing me? That seems pretty lame. Don't worry, we'll always be together! Right?");
 	fonts6.Add(2);
-	lines6.Add("LEILA: Of course silly... ");
+	chars6.Add("LEILA");
+	lines6.Add("Of course silly... ");
 	fonts6.Add(1);
-	lines6.Add("LEILA: The forest is just past that big tree over there, I am ready when you are");
+	chars6.Add("LEILA");
+	lines6.Add("The forest is just past that big tree over there, I am ready when you are");
 	fonts6.Add(1);
 }
 
@@ -152,7 +187,7 @@ void AJTutorial::DisplayText() {
 	{
 	case 0:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines0, durations0, fonts0);
+			DialogueHandler->sendNewdialogueSequence(lines0, durations0, fonts0, chars0);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -160,7 +195,7 @@ void AJTutorial::DisplayText() {
 
 	case 1:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines1, durations1, fonts1);
+			DialogueHandler->sendNewdialogueSequence(lines1, durations1, fonts1, chars1);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -168,7 +203,7 @@ void AJTutorial::DisplayText() {
 
 	case 2:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines2, durations2, fonts2);
+			DialogueHandler->sendNewdialogueSequence(lines2, durations2, fonts2, chars2);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -176,7 +211,7 @@ void AJTutorial::DisplayText() {
 
 	case 3:
 		if (!dialogueSent) {	
-			DialogueHandler->sendNewdialogueSequence(lines3, durations3, fonts3);
+			DialogueHandler->sendNewdialogueSequence(lines3, durations3, fonts3, chars3);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -184,7 +219,7 @@ void AJTutorial::DisplayText() {
 
 	case 4:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines4, durations4, fonts4);
+			DialogueHandler->sendNewdialogueSequence(lines4, durations4, fonts4, chars4);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -192,7 +227,7 @@ void AJTutorial::DisplayText() {
 
 	case 5:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines5, durations5, fonts5);
+			DialogueHandler->sendNewdialogueSequence(lines5, durations5, fonts5, chars5);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -200,7 +235,7 @@ void AJTutorial::DisplayText() {
 
 	case 6:
 		if (!dialogueSent) {
-			DialogueHandler->sendNewdialogueSequence(lines6, durations6, fonts6);
+			DialogueHandler->sendNewdialogueSequence(lines6, durations6, fonts6, chars6);
 			dialogueSent = true;
 			inputReady = false;
 		}
@@ -279,7 +314,7 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 			inputReady = true;
 			//send input instruction text
-			sendInputText(inputs0, inputFonts);
+			sendInputText(inputs0, inputFonts, inputChars);
 		}
 		if(inputReady){
 			if (archer->GetInputDirection().X != 0 || archer->GetInputDirection().Y != 0) ArcherDidInput = true;
@@ -297,7 +332,7 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 			inputReady = true;
 			//send input instruction text
-			sendInputText(inputs1, inputFonts);
+			sendInputText(inputs1, inputFonts, inputChars);
 		}
 
 		if(inputReady){
@@ -319,7 +354,7 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 			inputReady = true;
 			//send input instruction text
-			sendInputText(inputs2, inputFonts);
+			sendInputText(inputs2, inputFonts, inputChars);
 		}
 
 		if (inputReady) {
@@ -345,7 +380,7 @@ void AJTutorial::Tick(float DeltaTime)
 		if (DialogueHandler->dialogueFinished) {
 			inputReady = true;
 			//send input instruction text
-			sendInputText(inputs3, inputFonts);
+			sendInputText(inputs3, inputFonts, inputChars);
 		}
 
 		if (inputReady) {
@@ -371,7 +406,7 @@ void AJTutorial::Tick(float DeltaTime)
 		DisplayText();
 		if (DialogueHandler->dialogueFinished) {
 			inputReady = true;
-			sendInputText(inputs4, inputFonts);
+			sendInputText(inputs4, inputFonts, inputChars);
 		}
 
 		if (inputReady) {
@@ -406,9 +441,9 @@ void AJTutorial::Tick(float DeltaTime)
 }
 
 //Enacts changes in DialogueHandler for Input Prompt text and sends text
-void AJTutorial::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
+void AJTutorial::sendInputText(TArray<FString> inputs, TArray<int> fonts, TArray<FString> chars) {
 	if (!inputSent) {
-		DialogueHandler->sendInputText(inputs, fonts);
+		DialogueHandler->sendInputText(inputs, fonts, chars);
 		inputSent = true;
 	}
 }
