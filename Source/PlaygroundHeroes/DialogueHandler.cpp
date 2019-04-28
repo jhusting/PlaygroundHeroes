@@ -25,7 +25,6 @@ ADialogueHandler::ADialogueHandler()
 void ADialogueHandler::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -40,14 +39,14 @@ void ADialogueHandler::Tick(float DeltaTime)
 	If durations or fonts is shorter than lines it will continue to use the last lines duration or font.
 	If durations or fonts are empty will use defaults of 4.0 seconds and Playgroundheroes fonts
 */
-void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations, TArray<int> fonts) {
+void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<float> durations, TArray<int> fonts, TArray<FString> characters) {
 	if (lastSendWasInput) { 
 		splitMode = false;
 		lastSendWasInput = false;
 	}
 
 	if (lines.Num() <= 0) {
-		UE_LOG(LogTemp, Error, TEXT("CUSTOM: gave empty TArray to sendNewDialogueSequence"));
+		UE_LOG(LogTemp, Error, TEXT("Gave empty TArray<FString> to sendNewDialogueSequence"));
 		return;
 	}
 	maxLines = lines.Num();
@@ -56,11 +55,13 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	dialogueLines.Empty();
 	dialogueDurations.Empty();
 	fontTypes.Empty();
+	speakingCharacters.Empty();
 
 	//refill with new dialogue and durations
 	dialogueLines.Append(lines);
 	dialogueDurations.Append(durations);
 	fontTypes.Append(fonts);
+	speakingCharacters.Append(characters);
 
 	//Set default values for new dialogue sequence
 	defaultDuration = 4.0;
@@ -76,11 +77,11 @@ void ADialogueHandler::sendNewdialogueSequence(TArray<FString> lines, TArray<flo
 	setNewText();
 }
 
-void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts) {
+void ADialogueHandler::sendInputText(TArray<FString> inputs, TArray<int> fonts, TArray<FString> characters) {
 	lastSendWasInput = false;
 	toggleSplitMode(true);
 	TArray<float> dummyDurations;
-	sendNewdialogueSequence(inputs, dummyDurations, fonts);
+	sendNewdialogueSequence(inputs, dummyDurations, fonts, characters);
 	pause();
 	dialogueFinished = false;
 	lastSendWasInput = true;
@@ -113,15 +114,16 @@ void ADialogueHandler::updateDialogue(float DeltaTime) {
 		renderWidget = false;
 		paused = true;
 		dialogueFinished = true;
-		centerText = " ";
-		player1Text = " ";
-		player2Text = " ";
+		centerText = "";
+		player1Text = "";
+		player2Text = "";
 	}
 }
 
 void ADialogueHandler::setNewText() {
 	if (splitMode) {
-		centerText = " ";
+		centerText = "";
+		centerName = "";
 		if (dialogueLines.IsValidIndex(lineNumber) && dialogueLines.IsValidIndex(lineNumber + 1)) {
 			player1Text = dialogueLines[lineNumber];
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
@@ -130,6 +132,11 @@ void ADialogueHandler::setNewText() {
 			}
 			else player1Font = defaultFont;
 
+			if (speakingCharacters.IsValidIndex(lineNumber)) {
+				player1Name = speakingCharacters[lineNumber];
+			}
+			else player1Name = "";
+
 			lineNumber++;
 			player2Text = dialogueLines[lineNumber];
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
@@ -137,14 +144,21 @@ void ADialogueHandler::setNewText() {
 				player2Font = fontTypes[lineNumber];
 			}
 			else player2Font = defaultFont;
+
+			if (speakingCharacters.IsValidIndex(lineNumber)) {
+				player2Name = speakingCharacters[lineNumber];
+			}
+			else player2Name = "";
 		}
 		else {
-			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
+			UE_LOG(LogTemp, Error, TEXT("dialogueLines[%d] or dialogueLines[%d] is not a valid index"), lineNumber - 1, lineNumber);
 		}
 	}
 	else {
-		player1Text = " ";
-		player2Text = " ";
+		player1Text = "";
+		player2Text = "";
+		player1Name = "";
+		player2Name = "";
 		if (dialogueLines.IsValidIndex(lineNumber)) {
 			centerText = dialogueLines[lineNumber];
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *centerText);
@@ -153,9 +167,15 @@ void ADialogueHandler::setNewText() {
 				centerFont = fontTypes[lineNumber];
 			}
 			else centerFont = defaultFont;
+
+			if (speakingCharacters.IsValidIndex(lineNumber)) {
+				centerName = speakingCharacters[lineNumber];
+			}
+			else centerName = "";
+
 		}
 		else {
-			//UE_LOG(LogTemp, Warning, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
+			UE_LOG(LogTemp, Error, TEXT("dialogueLines[%d] is not a valid index"), lineNumber);
 		}
 	}
 	//reset time counter
@@ -166,10 +186,12 @@ void ADialogueHandler::saveDialogue() {
 	savedLines.Empty();
 	savedDurations.Empty();
 	savedFonts.Empty();
+	savedCharacters.Empty();
 
 	savedLines.Append(dialogueLines);
 	savedDurations.Append(dialogueDurations);
 	savedFonts.Append(fontTypes);
+	savedCharacters.Append(speakingCharacters);
 
 	savedMaxLines = maxLines;
 	savedSplitMode = splitMode;
@@ -186,10 +208,12 @@ void ADialogueHandler::loadSavedDialogue() {
 	dialogueLines.Empty();
 	dialogueDurations.Empty();
 	fontTypes.Empty();
+	speakingCharacters.Empty();
 
 	dialogueLines.Append(savedLines);
 	dialogueDurations.Append(savedDurations);
 	fontTypes.Append(savedFonts);
+	speakingCharacters.Append(savedCharacters);
 
 	lineNumber = savedLineNumber;
 	maxLines = savedMaxLines;
@@ -236,9 +260,12 @@ void ADialogueHandler::toggleSplitMode(bool enabled) {
 }
 
 void ADialogueHandler::clear() {
-	centerText = " ";
-	player1Text = " ";
-	player2Text = " ";
+	centerText = "";
+	player1Text = "";
+	player2Text = "";
+	centerName = "";
+	player1Name = "";
+	player2Name = "";
 	renderWidget = false;
 	dialogueFinished = true;
 	paused = true;
