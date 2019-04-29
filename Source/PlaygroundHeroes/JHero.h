@@ -63,7 +63,13 @@ public:
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
 	
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	virtual void AddHealth(float Change);
+	virtual void AddHealth(float Change, float StaggerTime);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void Stagger(float StaggerTime);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual	void UnStagger();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 		void TestFunction();
@@ -200,11 +206,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bStunned;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	bool bStaggered;
+
 	/*
 		Determines if player has fallen and can't get up
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bHasFallen;
+
+	/*
+		Timer for how long the character is in a staggered state
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+		FTimerHandle StaggerTHandle;
 
 	/*
 		Used to give player temporary Speed boosts/debuffs
@@ -213,6 +228,13 @@ protected:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float MovementModifier;
+
+	/*
+		Used to handle cases where player movement was changed before
+		another movement buff/debuff is applied.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float prevMovement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float deathMovementModifier;
@@ -263,6 +285,12 @@ protected:
 	FVector InputDirection;
 
 	FVector DodgeLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* StaggerMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float StaggerMontageDuration;
 
 	/*
 		A pointer to the target you are currently locked on to

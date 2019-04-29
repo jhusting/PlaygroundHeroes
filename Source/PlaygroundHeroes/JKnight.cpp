@@ -14,7 +14,7 @@ AJKnight::AJKnight()
 	PerfectBlockTime = 0.15f;
 }
 
-void AJKnight::AddHealth(float Change)
+void AJKnight::AddHealth(float Change, float StaggerTime)
 {
 	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
 	{
@@ -25,10 +25,64 @@ void AJKnight::AddHealth(float Change)
 	{
 		Stamina = FMath::Clamp(Stamina + Change / .8f, 0.f, 100.f);
 		BlockPart();
+		if(StaggerTime > 0.0f)
+			Stagger(StaggerTime);
 	}
 	else if (!bDodging)
 	{
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+		if(StaggerTime > 0.0f)
+			Stagger(StaggerTime);
+	}
+}
+
+void AJKnight::Stagger(float StaggerTime) {
+	prevMovement = 1.0;
+	bAttacking = false;
+	bDodging = false;
+
+	if (!bStaggered) prevMovement = MovementModifier;
+	if (!bHasFallen && !bStunned) MovementModifier = 0.0;
+
+	bCanDodge = false;
+	bCanAttack = false;
+	bCanInteract = false;
+	bStaggered = true;
+
+	float playrate;
+
+	if (bBlocking) 
+	{
+		StaggerTime = StaggerTime / 2.0f;
+		playrate = BlockStaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(BlockStaggerMontage, playrate, FName(TEXT("Default")) );
+	}
+	else
+	{
+		playrate = StaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+	}
+
+	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+}
+
+void AJKnight::UnStagger() {
+
+	if (!bHasFallen && !bStunned)
+	{
+		MovementModifier = prevMovement;
+		bCanDodge = true;
+		bCanAttack = true;
+		bCanInteract = true;
+		bStaggered = false;
+
+		if (bBlockAttempted) {
+			Block();
+		}
+		else
+		{
+			BlockReleased();
+		}
 	}
 }
 
@@ -146,15 +200,23 @@ void AJKnight::Block()
 {
 	if (!bDodging && !bAttacking)
 	{
-		bBlocking = true;
-		GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
+		bBlockAttempted = true;
+		if (!bStaggered) 
+		{
+			bBlocking = true;
+			GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
+		}
 	}
 }
 
 void AJKnight::BlockReleased()
 {
 	if(bBlocking)
-		bBlocking = false;
+		bBlockAttempted = false;
+		if (!bStaggered) 
+		{
+			bBlocking = false;
+		}
 }
 
 void AJKnight::PerfectBlockEnd()
