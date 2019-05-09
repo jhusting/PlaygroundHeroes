@@ -25,7 +25,6 @@ AJKid::AJKid()
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
 	LockCamRate = .05f;
-	MovementModifier = 1.f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
