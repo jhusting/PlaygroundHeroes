@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 		bool interacting;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+		bool bCrawling;
+
 	FORCEINLINE FVector GetInputDirection() const { return InputDirection; }
 
 	/** Returns CameraBoom subobject **/

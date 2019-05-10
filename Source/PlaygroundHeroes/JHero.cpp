@@ -168,11 +168,12 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AJHero::AddHealth(float Change, float StaggerTime)
 {
-	if (!bDodging)
+	if (!bDodging) {
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
 
-	if (StaggerTime > 0.0f && !bStunned)
-		Stagger(StaggerTime);
+		if (StaggerTime > 0.0f && !bStunned)
+			Stagger(StaggerTime);
+	}
 }
 
 void AJHero::Stagger(float StaggerTime)
