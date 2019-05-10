@@ -39,6 +39,9 @@ void AJArcher::Tick(float DeltaTime)
 
 void AJArcher::CppTick(float DeltaTime)
 {
+	if (timeHeld >= 0.f)
+		timeHeld += DeltaTime;
+
 	if (TimeSinceLastInput >= InputQueueTime)
 	{
 		bInputtingAttack = false;
@@ -58,8 +61,6 @@ void AJArcher::CppTick(float DeltaTime)
 	if (bAttacking)
 	{
 		OrientToControlRot();
-		if (timeHeld >= 0.f)
-			timeHeld += DeltaTime;
 	}
 
 	if (bDodging)
