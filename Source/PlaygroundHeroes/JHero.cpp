@@ -493,6 +493,7 @@ void AJHero::Die()
 	}
 	bAttacking = false;
 	bDodging = false;
+	bIsLocked = false;
 	
 	bHasFallen = true;
 	bStunned = false;
