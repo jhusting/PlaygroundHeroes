@@ -4,6 +4,7 @@
 #include "Components/InputComponent.h"
 #include "TimerManager.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AJKnight::AJKnight()
 {
@@ -103,6 +104,8 @@ void AJKnight::CppTick(float DeltaTime)
 	{
 		LockCameraHelper();
 	}
+	else
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	if (bDodging)
 	{

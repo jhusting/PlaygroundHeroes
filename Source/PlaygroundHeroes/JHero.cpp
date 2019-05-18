@@ -108,6 +108,8 @@ void AJHero::CppTick(float DeltaTime)
 	{
 		LockCameraHelper();
 	}
+	else
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	if (bDodging)
 	{

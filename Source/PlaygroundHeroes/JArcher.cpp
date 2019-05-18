@@ -154,14 +154,17 @@ void AJArcher::LockCameraHelper()
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), enLocation);
 	FRotator oldRotation = GetControlRotation();
 
+	oldRotation.Pitch = -15.f;
+	oldRotation.Roll = 0;
 	newRotation.Pitch = -15.f;
 	newRotation.Roll = 0;
 
 	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
 
-	//Controller->SetControlRotation(change);
+	Controller->SetControlRotation(change);
 
-	if ((oldRotation - newRotation).Yaw < 3.f)
+	UE_LOG(LogClass, Warning, TEXT("%f"), UKismetMathLibrary::NormalizedDeltaRotator(newRotation, oldRotation).Yaw);
+	if (UKismetMathLibrary::NormalizedDeltaRotator(newRotation, oldRotation).Yaw < 3.f)
 	{
 		bIsLocked = false;
 		lockTarget = nullptr;
