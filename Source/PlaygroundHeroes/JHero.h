@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	float LockCamRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	bool bCameraInverted;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool interacting;
 

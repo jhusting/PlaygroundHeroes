@@ -64,6 +64,7 @@ AJHero::AJHero(){ //2 sneaky
 	StaminaGen = 17.5f;
 
 	bIsLocked = false;
+	bCameraInverted = false;
 	bInputtingAttack = false;
 	bAttacking = false;
 	bInputtingDodge = false;
@@ -224,7 +225,12 @@ void AJHero::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	if (!bIsLocked && !bHasFallen)
-		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	{
+		if(!bCameraInverted)
+			AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+		else
+			AddControllerPitchInput(-1.f * Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void AJHero::MoveForward(float Value)
