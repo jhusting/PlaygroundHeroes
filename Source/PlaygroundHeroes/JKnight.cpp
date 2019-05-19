@@ -38,6 +38,7 @@ void AJKnight::AddHealth(float Change, float StaggerTime)
 }
 
 void AJKnight::Stagger(float StaggerTime) {
+	StaggerTime = 0.7f;
 	prevMovement = 1.0;
 	bAttacking = false;
 	bDodging = false;
@@ -54,7 +55,7 @@ void AJKnight::Stagger(float StaggerTime) {
 
 	if (bBlocking) 
 	{
-		StaggerTime = StaggerTime / 2.0f;
+		//StaggerTime = StaggerTime / 2.0f;
 		playrate = BlockStaggerMontageDuration / StaggerTime;
 		PlayAnimMontage(BlockStaggerMontage, playrate, FName(TEXT("Default")) );
 	}
@@ -77,13 +78,18 @@ void AJKnight::UnStagger() {
 		bCanInteract = true;
 		bStaggered = false;
 
-		if (bBlockAttempted) {
+		/*if (bBlockAttempted) 
+		{
 			Block();
+		}*/
+		if (bInputtingDodge)
+		{
+			Dodge();
 		}
-		else
+		/*else
 		{
 			BlockReleased();
-		}
+		}*/
 	}
 }
 
@@ -182,15 +188,16 @@ void AJKnight::Attack()
 }
 void AJKnight::Dodge()
 {
+	bInputtingDodge = true;
+	TimeSinceLastInput = 0.f;
+
+	if (bInputtingAttack)
+	{
+		bInputtingAttack = false;
+	}
+
 	if (!bHasFallen && !bAttacking) 
 	{
-		bInputtingDodge = true;
-		TimeSinceLastInput = 0.f;
-
-		if (bInputtingAttack)
-		{
-			bInputtingAttack = false;
-		}
 		if (!bDodging && bCanDodge) 
 		{
 			bBlocking = false;
@@ -201,25 +208,19 @@ void AJKnight::Dodge()
 
 void AJKnight::Block()
 {
-	if (!bDodging && !bAttacking)
+	bBlockAttempted = true;
+	if (!bDodging && !bAttacking && !bStaggered)
 	{
-		bBlockAttempted = true;
-		if (!bStaggered) 
-		{
-			bBlocking = true;
-			GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
-		}
+		bBlocking = true;
+		GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
 	}
 }
 
 void AJKnight::BlockReleased()
 {
-	if(bBlocking)
-		bBlockAttempted = false;
-		if (!bStaggered) 
-		{
-			bBlocking = false;
-		}
+	bBlockAttempted = false;
+
+	bBlocking = false;
 }
 
 void AJKnight::PerfectBlockEnd()

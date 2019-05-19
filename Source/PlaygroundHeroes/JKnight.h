@@ -40,6 +40,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bBlocking;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool bBlockAttempted;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
