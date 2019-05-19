@@ -159,7 +159,7 @@ protected:
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
 	// Handler for when the camera is to be locked
-	void LockCamera();
+	virtual void LockCamera();
 
 	
 	// True when the camera is locked

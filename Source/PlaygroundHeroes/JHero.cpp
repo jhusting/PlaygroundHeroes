@@ -24,7 +24,7 @@ AJHero::AJHero(){ //2 sneaky
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-	LockCamRate = .05f;
+	LockCamRate = 1.45f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -442,7 +442,7 @@ void AJHero::LockCameraHelper()
 	newRotation.Pitch = -15.f;
 	newRotation.Roll = 0;
 
-	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
+	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate*FApp::GetDeltaTime(), true);
 
 	Controller->SetControlRotation(change);
 
