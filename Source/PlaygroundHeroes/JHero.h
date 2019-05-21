@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	float LockCamRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	bool bCameraInverted;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	bool interacting;
 
@@ -156,7 +159,7 @@ protected:
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
 	// Handler for when the camera is to be locked
-	void LockCamera();
+	virtual void LockCamera();
 
 	
 	// True when the camera is locked

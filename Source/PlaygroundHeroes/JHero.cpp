@@ -24,7 +24,7 @@ AJHero::AJHero(){ //2 sneaky
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-	LockCamRate = .05f;
+	LockCamRate = 1.45f;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -64,6 +64,7 @@ AJHero::AJHero(){ //2 sneaky
 	StaminaGen = 17.5f;
 
 	bIsLocked = false;
+	bCameraInverted = false;
 	bInputtingAttack = false;
 	bAttacking = false;
 	bInputtingDodge = false;
@@ -108,6 +109,8 @@ void AJHero::CppTick(float DeltaTime)
 	{
 		LockCameraHelper();
 	}
+	else
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	if (bDodging)
 	{
@@ -222,7 +225,12 @@ void AJHero::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	if (!bIsLocked && !bHasFallen)
-		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	{
+		if(!bCameraInverted)
+			AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+		else
+			AddControllerPitchInput(-1.f * Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void AJHero::MoveForward(float Value)
@@ -434,7 +442,7 @@ void AJHero::LockCameraHelper()
 	newRotation.Pitch = -15.f;
 	newRotation.Roll = 0;
 
-	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
+	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate*FApp::GetDeltaTime(), true);
 
 	Controller->SetControlRotation(change);
 

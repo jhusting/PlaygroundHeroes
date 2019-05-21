@@ -12,6 +12,7 @@
 #include "Camera/CameraComponent.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
+#include "EngineUtils.h"
 
 
 AJArcher::AJArcher()
@@ -30,6 +31,7 @@ AJArcher::AJArcher()
 	HeldSpeedAdded = 3500.f;
 	HoldTimeNeeded = 1.5f;
 	minimumHoldTime = 0.3f;
+	LockCamRate = 3.f;
 }
 
 void AJArcher::Tick(float DeltaTime)
@@ -52,8 +54,10 @@ void AJArcher::CppTick(float DeltaTime)
 
 	if (bIsLocked)
 	{
-		Super::LockCameraHelper();
+		LockCameraHelper();
 	}
+	else
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	if (bAttacking)
 	{
@@ -148,20 +152,69 @@ void AJArcher::MoveRight(float Value)
 		//GetCharacterMovement()->AddForce(Direction*Value);
 	}
 }
+
+void AJArcher::LockCamera()
+{
+	if (bIsLocked)
+	{
+		bIsLocked = false;
+		lockTarget = nullptr;
+		//GetCharacterMovement()->bOrientRotationToMovement = true;
+	}
+	else
+	{
+		//GetCharacterMovement()->bOrientRotationToMovement = false;
+		//uncomment when AJEnemy is in
+		UE_LOG(LogClass, Warning, TEXT("Archer Lockcam"));
+		AJEnemy* closest = nullptr;
+		float closestAngle = 360.f;
+		for (TActorIterator<AActor> itr(GetWorld()); itr; ++itr)
+		{
+			AJEnemy* const JEnemyItr = Cast<AJEnemy>(*itr);
+
+			if (JEnemyItr)
+			{
+				FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), JEnemyItr->GetActorLocation()).Clamp();
+				//FRotator camRotation = GetControlRotation().Clamp();
+				FRotator camRotation = GetControlRotation().Clamp();
+
+				float angDiff = UKismetMathLibrary::NormalizedDeltaRotator(newRotation, camRotation).Yaw;
+				angDiff = UKismetMathLibrary::Abs(angDiff);
+
+				float emAngle = UKismetMathLibrary::Abs(camRotation.Yaw - newRotation.Yaw);
+
+				if (angDiff < closestAngle)
+				{
+					closestAngle = angDiff;
+					closest = JEnemyItr;
+				}
+			}
+		}
+
+		if (closest != nullptr)
+		{
+			lockTarget = closest;
+			bIsLocked = true;
+		}
+	}
+}
+
 void AJArcher::LockCameraHelper()
 {
 	FVector enLocation = lockTarget->GetActorLocation();
 	FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), enLocation);
 	FRotator oldRotation = GetControlRotation();
 
+	oldRotation.Pitch = -15.f;
+	oldRotation.Roll = 0;
 	newRotation.Pitch = -15.f;
 	newRotation.Roll = 0;
 
-	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate, true);
+	FRotator change = UKismetMathLibrary::RLerp(oldRotation, newRotation, LockCamRate*FApp::GetDeltaTime(), true);
 
-	//Controller->SetControlRotation(change);
+	Controller->SetControlRotation(change);
 
-	if ((oldRotation - newRotation).Yaw < 3.f)
+	if (FMath::Abs(UKismetMathLibrary::NormalizedDeltaRotator(newRotation, oldRotation).Yaw) < 3.f)
 	{
 		bIsLocked = false;
 		lockTarget = nullptr;

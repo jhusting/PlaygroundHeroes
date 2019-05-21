@@ -53,6 +53,8 @@ protected:
 	/** Called for side to side input */
 	virtual void MoveRight(float Value);
 
+	virtual void LockCamera();
+
 	// Helper for LockCamera function, only runs when the camera can be locked onto an actor
 	virtual void LockCameraHelper();
 
