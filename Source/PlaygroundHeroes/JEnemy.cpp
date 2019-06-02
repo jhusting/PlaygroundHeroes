@@ -57,54 +57,57 @@ void AJEnemy::AddHealth(float Change, FString MoveName)
 	UWorld* const World = GetWorld();
 	FConstPlayerControllerIterator pItr = World->GetPlayerControllerIterator();
 
-	// Spawn Player 1 Damage Text
-	UUserWidget* DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
-	DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
+	//Only spawn damage text widget on something that isn't already dead
+	if (this->Health > 0) {
+		// Spawn Player 1 Damage Text
+		UUserWidget* DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
+		DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
 
-	if (DamageText)
-	{
-		UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
-		if (Property) // If we successfully found that property
+		if (DamageText)
 		{
-			float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
-			if (currDamage) //If the value has been initialized
-				*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+			UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
+			if (Property) // If we successfully found that property
+			{
+				float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
+				if (currDamage) //If the value has been initialized
+					*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+			}
+
+
+			Property = DamageText->GetClass()->FindPropertyByName("HitActor");
+			if (Property)
+			{
+				AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
+				*hitActor = this;
+			}
+
+			DamageText->AddToPlayerScreen();
 		}
 
-	
-		Property = DamageText->GetClass()->FindPropertyByName("HitActor");
-		if (Property)
+		pItr++;
+
+		DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
+		DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
+
+		if (DamageText)
 		{
-			AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
-			*hitActor = this;
+			UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
+			if (Property) // If we successfully found that property
+			{
+				float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
+				if (currDamage) //If the value has been initialized
+					*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
+			}
+
+			Property = DamageText->GetClass()->FindPropertyByName("HitActor");
+			if (Property)
+			{
+				AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
+				*hitActor = this;
+			}
+
+			DamageText->AddToPlayerScreen();
 		}
-
-		DamageText->AddToPlayerScreen();
-	}
-
-	pItr++;
-
-	DamageText = CreateWidget<UUserWidget>(World, DamageWidgetBPClass);
-	DamageText->SetOwningPlayer(Cast<APlayerController>(*pItr));
-
-	if (DamageText)
-	{
-		UProperty* Property = DamageText->GetClass()->FindPropertyByName("DamageToDisplay");
-		if (Property) // If we successfully found that property
-		{
-			float* currDamage = Property->ContainerPtrToValuePtr<float>(DamageText);
-			if (currDamage) //If the value has been initialized
-				*currDamage = -1.f * Change; // Damage = 15 + 20 * the held ratio (this would be 100% at max strength, 0% with a 1 frame hold)
-		}
-
-		Property = DamageText->GetClass()->FindPropertyByName("HitActor");
-		if (Property)
-		{
-			AActor** hitActor = Property->ContainerPtrToValuePtr<AActor*>(DamageText);
-			*hitActor = this;
-		}
-
-		DamageText->AddToPlayerScreen();
 	}
 
 	Health = FMath::Clamp(Health + Change, 0.f, maxHealth);
