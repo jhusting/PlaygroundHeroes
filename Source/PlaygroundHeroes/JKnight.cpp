@@ -169,7 +169,7 @@ void AJKnight::ResetInputBools()
 
 void AJKnight::Attack()
 {
-	if (!bHasFallen) 
+	if (!bHasFallen && bCanAttack) 
 	{
 		bInputtingAttack = true;
 		TimeSinceLastInput = 0.f;
@@ -209,7 +209,7 @@ void AJKnight::Dodge()
 void AJKnight::Block()
 {
 	bBlockAttempted = true;
-	if (!bDodging && !bAttacking && !bStaggered)
+	if (!bDodging && !bAttacking && !bStaggered && !bStunned)
 	{
 		bBlocking = true;
 		GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);
