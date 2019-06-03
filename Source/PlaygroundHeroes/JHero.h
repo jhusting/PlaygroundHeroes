@@ -65,8 +65,9 @@ public:
 
 	FORCEINLINE float GetTimeSinceLastInput() { return TimeSinceLastInput; }
 	
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	virtual void AddHealth(float Change, float StaggerTime);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void AddHealth(float Change, float StaggerTime);
+	virtual void AddHealth_Implementation(float Change, float StaggerTime);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	virtual void Stagger(float StaggerTime);

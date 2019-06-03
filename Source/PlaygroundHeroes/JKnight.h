@@ -19,7 +19,7 @@ public:
 
 	FORCEINLINE bool GetBlocking() const { return bBlocking; }
 
-	virtual void AddHealth(float Change, float StaggerTime);
+	virtual void AddHealth_Implementation(float Change, float StaggerTime) override;
 	virtual void CppTick(float DeltaTime);
 
 	virtual void Stagger(float StaggerTime);

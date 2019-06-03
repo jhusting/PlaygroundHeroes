@@ -15,7 +15,7 @@ AJKnight::AJKnight()
 	PerfectBlockTime = 0.15f;
 }
 
-void AJKnight::AddHealth(float Change, float StaggerTime)
+void AJKnight::AddHealth_Implementation(float Change, float StaggerTime)
 {
 	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
 	{
