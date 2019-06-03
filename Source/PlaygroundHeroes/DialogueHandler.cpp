@@ -129,6 +129,7 @@ void ADialogueHandler::setNewText() {
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player1Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player1Font = fontTypes[lineNumber];
+				defaultFont = player1Font;
 			}
 			else player1Font = defaultFont;
 
@@ -142,6 +143,7 @@ void ADialogueHandler::setNewText() {
 			//UE_LOG(LogTemp, Warning, TEXT("%s"), *player2Text);
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				player2Font = fontTypes[lineNumber];
+				defaultFont = player2Font;
 			}
 			else player2Font = defaultFont;
 
@@ -165,6 +167,7 @@ void ADialogueHandler::setNewText() {
 
 			if (fontTypes.IsValidIndex(lineNumber)) {
 				centerFont = fontTypes[lineNumber];
+				defaultFont = centerFont;
 			}
 			else centerFont = defaultFont;
 
