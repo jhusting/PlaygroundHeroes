@@ -70,6 +70,9 @@ public:
 	virtual void AddHealth_Implementation(float Change, float StaggerTime);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void AddHealthCPP(float Change, float StaggerTime);
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
 	virtual void Stagger(float StaggerTime);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")

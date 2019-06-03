@@ -37,6 +37,28 @@ void AJKnight::AddHealth_Implementation(float Change, float StaggerTime)
 	}
 }
 
+void AJKnight::AddHealthCPP(float Change, float StaggerTime)
+{
+	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
+	{
+		Stamina = FMath::Clamp(Stamina + Change / 4.f, 0.f, 100.f);
+		PerfectBlockPart();
+	}
+	else if (bBlocking)
+	{
+		Stamina = FMath::Clamp(Stamina + Change / .8f, 0.f, 100.f);
+		BlockPart();
+		if (StaggerTime > 0.0f)
+			Stagger(StaggerTime);
+	}
+	else if (!bDodging)
+	{
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+		if (StaggerTime > 0.0f)
+			Stagger(StaggerTime);
+	}
+}
+
 void AJKnight::Stagger(float StaggerTime) {
 	StaggerTime = 0.7f;
 	prevMovement = 1.0;

@@ -179,6 +179,16 @@ void AJHero::AddHealth_Implementation(float Change, float StaggerTime)
 	}
 }
 
+void AJHero::AddHealthCPP(float Change, float StaggerTime)
+{
+	if (!bDodging) {
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+
+		if (StaggerTime > 0.0f && !bStunned)
+			Stagger(StaggerTime);
+	}
+}
+
 void AJHero::Stagger(float StaggerTime)
 {
 	prevMovement = 1.0;
