@@ -60,7 +60,6 @@ void AJKnight::AddHealthCPP(float Change, float StaggerTime)
 }
 
 void AJKnight::Stagger(float StaggerTime) {
-	StaggerTime = 0.7f;
 	prevMovement = 1.0;
 	bAttacking = false;
 	bDodging = false;
@@ -73,21 +72,21 @@ void AJKnight::Stagger(float StaggerTime) {
 	bCanInteract = false;
 	bStaggered = true;
 
-	float playrate;
+	//float playrate;
 
 	if (bBlocking) 
 	{
 		//StaggerTime = StaggerTime / 2.0f;
-		playrate = BlockStaggerMontageDuration / StaggerTime;
-		PlayAnimMontage(BlockStaggerMontage, playrate, FName(TEXT("Default")) );
+		//playrate = BlockStaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(BlockStaggerMontage, 1.f, FName(TEXT("Default")) );
 	}
 	else
 	{
-		playrate = StaggerMontageDuration / StaggerTime;
-		PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+		//playrate = StaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(StaggerMontage, 1.f, FName(TEXT("Default")) );
 	}
 
-	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+	GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
 void AJKnight::UnStagger() {
