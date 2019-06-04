@@ -153,6 +153,15 @@ void AJArcher::MoveRight(float Value)
 	}
 }
 
+void AJArcher::Stagger(float StaggerTime)
+{
+	Super::Stagger(StaggerTime);
+
+	mArrow->Destroy();
+	mArrow = nullptr;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
 void AJArcher::LockCamera()
 {
 	if (bIsLocked)
