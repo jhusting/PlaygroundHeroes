@@ -51,6 +51,7 @@ AJKid::AJKid()
 
 	InputDirection = FVector(0.f, 0.f, 0.f);
 	MovementModifier = 1.0f;
+	bCameraInverted = false;
 }
 
 // Called when the game starts or when spawned
@@ -99,6 +100,8 @@ void AJKid::TurnAtRate(float Rate)
 
 void AJKid::LookUpAtRate(float Rate)
 {
+	if (bCameraInverted)
+		Rate *= -1.f;
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
