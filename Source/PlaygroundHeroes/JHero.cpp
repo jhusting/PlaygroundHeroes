@@ -211,7 +211,7 @@ void AJHero::Stagger(float StaggerTime)
 
 	FTimerHandle StaggerHandle;
 
-	GetWorld()->GetTimerManager().SetTimer(StaggerHandle, this, &AJHero::UnStagger, StaggerTime, false);
+	GetWorld()->GetTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
