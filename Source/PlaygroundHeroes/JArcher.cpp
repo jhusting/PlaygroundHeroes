@@ -153,6 +153,18 @@ void AJArcher::MoveRight(float Value)
 	}
 }
 
+void AJArcher::Stagger(float StaggerTime)
+{
+	Super::Stagger(StaggerTime);
+
+	if (mArrow)
+	{
+		mArrow->Destroy();
+		mArrow = nullptr;
+	}
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
 void AJArcher::LockCamera()
 {
 	if (bIsLocked)
@@ -165,7 +177,6 @@ void AJArcher::LockCamera()
 	{
 		//GetCharacterMovement()->bOrientRotationToMovement = false;
 		//uncomment when AJEnemy is in
-		UE_LOG(LogClass, Warning, TEXT("Archer Lockcam"));
 		AJEnemy* closest = nullptr;
 		float closestAngle = 360.f;
 		for (TActorIterator<AActor> itr(GetWorld()); itr; ++itr)

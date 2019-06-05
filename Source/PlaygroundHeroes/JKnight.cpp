@@ -15,7 +15,7 @@ AJKnight::AJKnight()
 	PerfectBlockTime = 0.15f;
 }
 
-void AJKnight::AddHealth(float Change, float StaggerTime)
+void AJKnight::AddHealth_Implementation(float Change, float StaggerTime)
 {
 	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
 	{
@@ -37,8 +37,29 @@ void AJKnight::AddHealth(float Change, float StaggerTime)
 	}
 }
 
+void AJKnight::AddHealthCPP(float Change, float StaggerTime)
+{
+	if (GetWorldTimerManager().IsTimerActive(PerfectBlockTHandle))
+	{
+		Stamina = FMath::Clamp(Stamina + Change / 4.f, 0.f, 100.f);
+		PerfectBlockPart();
+	}
+	else if (bBlocking)
+	{
+		Stamina = FMath::Clamp(Stamina + Change / .8f, 0.f, 100.f);
+		BlockPart();
+		if (StaggerTime > 0.0f)
+			Stagger(StaggerTime);
+	}
+	else if (!bDodging)
+	{
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+		if (StaggerTime > 0.0f)
+			Stagger(StaggerTime);
+	}
+}
+
 void AJKnight::Stagger(float StaggerTime) {
-	StaggerTime = 0.7f;
 	prevMovement = 1.0;
 	bAttacking = false;
 	bDodging = false;
@@ -51,21 +72,21 @@ void AJKnight::Stagger(float StaggerTime) {
 	bCanInteract = false;
 	bStaggered = true;
 
-	float playrate;
+	//float playrate;
 
 	if (bBlocking) 
 	{
 		//StaggerTime = StaggerTime / 2.0f;
-		playrate = BlockStaggerMontageDuration / StaggerTime;
-		PlayAnimMontage(BlockStaggerMontage, playrate, FName(TEXT("Default")) );
+		//playrate = BlockStaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(BlockStaggerMontage, 1.f, FName(TEXT("Default")) );
 	}
 	else
 	{
-		playrate = StaggerMontageDuration / StaggerTime;
-		PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+		//playrate = StaggerMontageDuration / StaggerTime;
+		PlayAnimMontage(StaggerMontage, 1.f, FName(TEXT("Default")) );
 	}
 
-	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
+	GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
 void AJKnight::UnStagger() {
@@ -169,7 +190,7 @@ void AJKnight::ResetInputBools()
 
 void AJKnight::Attack()
 {
-	if (!bHasFallen) 
+	if (!bHasFallen && bCanAttack) 
 	{
 		bInputtingAttack = true;
 		TimeSinceLastInput = 0.f;
@@ -209,7 +230,7 @@ void AJKnight::Dodge()
 void AJKnight::Block()
 {
 	bBlockAttempted = true;
-	if (!bDodging && !bAttacking && !bStaggered)
+	if (!bDodging && !bAttacking && !bStaggered && !bStunned)
 	{
 		bBlocking = true;
 		GetWorldTimerManager().SetTimer(PerfectBlockTHandle, this, &AJKnight::PerfectBlockEnd, PerfectBlockTime, false);

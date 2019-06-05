@@ -169,10 +169,25 @@ void AJHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AJHero::LookUpAtRate);
 }
 
-void AJHero::AddHealth(float Change, float StaggerTime)
+void AJHero::AddHealth_Implementation(float Change, float StaggerTime)
 {
 	if (!bDodging) {
 		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+
+		if (StaggerTime > 0.0f && !bStunned)
+			Stagger(StaggerTime);
+	}
+}
+
+void AJHero::AddHealthCPP(float Change, float StaggerTime)
+{
+	if (!bDodging) {
+		Health = FMath::Clamp(Health + Change, 0.f, MaxHealth);
+		
+		if (StaggerTime <= 0.f)
+			PlayAnimMontage(StaggerMontage, 1.0f, FName(TEXT("Default")));
+		//else if (StaggerTime < 0.7f)
+			//StaggerTime = 0.7f;
 
 		if (StaggerTime > 0.0f && !bStunned)
 			Stagger(StaggerTime);
@@ -192,8 +207,11 @@ void AJHero::Stagger(float StaggerTime)
 	bCanInteract = false;
 	bStaggered = true;
 
-	float playrate = StaggerMontageDuration / StaggerTime;
-	PlayAnimMontage(StaggerMontage, playrate, FName(TEXT("Default")) );
+	PlayAnimMontage(StaggerMontage, 1.0f, FName(TEXT("Default")));
+
+	FTimerHandle StaggerHandle;
+
+	GetWorld()->GetTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 	//GetWorldTimerManager().SetTimer(StaggerTHandle, this, &AJHero::UnStagger, StaggerTime, false);
 }
 
