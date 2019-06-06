@@ -543,10 +543,13 @@ void AJHero::Revive()
 
 void AJHero::OrientToControlRot()
 {
-	const FRotator Rotation = Controller->GetControlRotation();
-	FRotator PlayerRotation = GetActorRotation();
+	if (Controller)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		FRotator PlayerRotation = GetActorRotation();
 
-	PlayerRotation.Yaw = Rotation.Yaw;
+		PlayerRotation.Yaw = Rotation.Yaw;
 
-	SetActorRotation(PlayerRotation);
+		SetActorRotation(PlayerRotation);
+	}
 }
