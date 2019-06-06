@@ -77,8 +77,8 @@ void AJKid::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//PlayerInputComponent->BindAction("LockCam", IE_Pressed, this, &AJHero::LockCamera);
 	//PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AJHero::Attack);
 	//PlayerInputComponent->BindAction("Dodge", IE_Pressed, this, &AJHero::Dodge);
-	//PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AJHero::InteractPressed);
-	//PlayerInputComponent->BindAction("Interact", IE_Released, this, &AJHero::InteractReleased);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AJKid::InteractPressed);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AJKid::InteractReleased);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AJKid::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AJKid::MoveRight);
@@ -143,4 +143,14 @@ void AJKid::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 		//GetCharacterMovement()->AddForce(Direction*Value);
 	}
+}
+
+void AJKid::InteractPressed()
+{
+	interacting = true;
+}
+
+void AJKid::InteractReleased()
+{
+	interacting = false;
 }
