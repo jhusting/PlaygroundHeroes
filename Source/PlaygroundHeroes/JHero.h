@@ -13,10 +13,6 @@ class PLAYGROUNDHEROES_API AJHero : public ACharacter{
 	TSubclassOf<class AActor> LifeAlert;
 	AActor* mLifeAlert = nullptr;
 
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
@@ -148,13 +144,13 @@ protected:
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void TurnAtRate(float Rate);
+	virtual void TurnAtRate(float Rate);
 
 	/**
 	 * Called via input to turn look up/down at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void LookUpAtRate(float Rate);
+	virtual void LookUpAtRate(float Rate);
 
 	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
@@ -166,6 +162,10 @@ protected:
 	virtual void LockCamera();
 
 	
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class USpringArmComponent* CameraBoom;
+
 	// True when the camera is locked
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "JCamera")
 	bool bIsLocked;

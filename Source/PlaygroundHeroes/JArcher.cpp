@@ -32,6 +32,7 @@ AJArcher::AJArcher()
 	HoldTimeNeeded = 1.5f;
 	minimumHoldTime = 0.3f;
 	LockCamRate = 3.f;
+	heldSensitivity = 0.5f;
 }
 
 void AJArcher::Tick(float DeltaTime)
@@ -64,6 +65,12 @@ void AJArcher::CppTick(float DeltaTime)
 		OrientToControlRot();
 		if (timeHeld >= 0.f)
 			timeHeld += DeltaTime;
+
+		CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 130.f, 0.5f*DeltaTime);
+	}
+	else
+	{
+		CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 300.f, 2.5f*DeltaTime);
 	}
 
 	if (bDodging)
@@ -150,6 +157,29 @@ void AJArcher::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 		//GetCharacterMovement()->AddForce(Direction*Value);
+	}
+}
+
+void AJArcher::TurnAtRate(float Rate)
+{
+	if (bAttacking)
+		Rate *= heldSensitivity;
+	// calculate delta for this frame from the rate information
+	if (!bIsLocked && !bHasFallen)
+		AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AJArcher::LookUpAtRate(float Rate)
+{
+	if (bAttacking)
+		Rate *= heldSensitivity;
+	// calculate delta for this frame from the rate information
+	if (!bIsLocked && !bHasFallen)
+	{
+		if (!bCameraInverted)
+			AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+		else
+			AddControllerPitchInput(-1.f * Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 	}
 }
 
