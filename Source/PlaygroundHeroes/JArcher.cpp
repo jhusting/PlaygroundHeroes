@@ -355,6 +355,7 @@ void AJArcher::ReleaseAttack()
 				}
 			}
 		}
+		timeHeld = 0.f;
 		bAttacking = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
