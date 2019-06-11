@@ -66,11 +66,13 @@ void AJArcher::CppTick(float DeltaTime)
 		if (timeHeld >= 0.f)
 			timeHeld += DeltaTime;
 
-		CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 130.f, 0.5f*DeltaTime);
+		if (CameraBoom)
+			CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 130.f, 0.5f*DeltaTime);
 	}
 	else
 	{
-		CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 300.f, 2.5f*DeltaTime);
+		if (CameraBoom)
+			CameraBoom->TargetArmLength = FMath::Lerp(CameraBoom->TargetArmLength, 300.f, 2.5f*DeltaTime);
 	}
 
 	if (bDodging)
